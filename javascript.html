@@ -82,17 +82,17 @@ function addToCart(product){
 
         cart.push({
 
-            sku:product[1],
+    id: product[0],
+    sku: product[1],
+    category: product[2],
+    design: product[3],
+    collection: product[4],
+    name: product[5],
+    size: product[6],
+    cost: Number(product[7]),
+    price: Number(product[8]),
+    qty: 1
 
-            name:product[5],
-
-            collection:product[4],
-
-            size:product[6],
-
-            price:Number(product[8]),
-
-            qty:1
 
         });
 
@@ -191,6 +191,36 @@ function decreaseQty(sku){
         removeFromCart(sku);
 
     }
+
+}
+function completeSale(paymentType){
+
+    if(cart.length === 0){
+
+        alert("Cart is empty.");
+
+        return;
+
+    }
+
+    google.script.run
+        .withSuccessHandler(function(){
+
+            alert("Sale completed successfully!");
+
+            cart = [];
+
+            refreshCart();
+
+            searchProducts();
+
+        })
+        .withFailureHandler(function(error){
+
+            alert("Error: " + error.message);
+
+        })
+        .saveSale(cart, paymentType);
 
 }
 
