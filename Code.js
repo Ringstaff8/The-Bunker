@@ -11,6 +11,13 @@
 /**
  * Runs every time the spreadsheet opens.
  */
+/**
+ * Application Constants
+ */
+const APP = {
+  NAME: "The Bunker",
+  VERSION: "Beta 1.0"
+}
 function onOpen(e) {
 
   createBunkerMenu();

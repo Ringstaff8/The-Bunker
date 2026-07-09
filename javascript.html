@@ -1,171 +1,96 @@
 <script>
 
-/* ==========================================================
-   THE BUNKER
-   javascript.html
-   Beta 1.0
-========================================================== */
-
-let products = [];
+let currentProducts = [];
 let cart = [];
 
-/* ==========================================================
-   INITIALIZE
-========================================================== */
-
-window.onload = function(){
-
-    google.script.run
-
-        .withSuccessHandler(function(data){
-
-            products = data;
-
-            renderProducts(products);
-
-        })
-
-        .loadProducts();
-
-};
-
-
-/* ==========================================================
+/* ==========================================
    SEARCH
-========================================================== */
+========================================== */
 
 function searchProducts(){
 
-    const text = document
-        .getElementById("searchBox")
-        .value
-        .toLowerCase()
-        .trim();
+    const text =
+        document.getElementById("searchBox").value;
 
-    if(text===""){
+    google.script.run
 
-        renderProducts(products);
+        .withSuccessHandler(showProducts)
 
-        return;
-
-    }
-
-    const filtered = products.filter(product=>{
-
-        return (
-
-            product.sku.toLowerCase().includes(text) ||
-
-            product.category.toLowerCase().includes(text) ||
-
-            String(product.design).toLowerCase().includes(text) ||
-
-            String(product.collection).toLowerCase().includes(text) ||
-
-            product.name.toLowerCase().includes(text) ||
-
-            String(product.size).toLowerCase().includes(text)
-
-        );
-
-    });
-
-    renderProducts(filtered);
+        .getSearchResults(text);
 
 }
 
+function showProducts(products){
 
-/* ==========================================================
-   PRODUCT LIST
-========================================================== */
+    currentProducts = products;
 
-function renderProducts(list){
-
-    const div =
+    const results =
         document.getElementById("productResults");
 
-    div.innerHTML="";
+    results.innerHTML = "";
 
-    if(list.length===0){
+    if(products.length===0){
 
-        div.innerHTML="<p>No products found.</p>";
+        results.innerHTML =
+        "<p>No matching products.</p>";
 
         return;
 
     }
 
-    list.forEach(product=>{
+    products.forEach(product=>{
 
         const card =
             document.createElement("div");
 
-        card.className="product-card";
+        card.className = "product-card";
 
-        card.innerHTML=
+        card.onclick = ()=>addToCart(product);
 
-        "<strong>"+product.name+"</strong><br>"+
+        card.innerHTML =
 
-        product.collection+
+            "<strong>"+product[5]+"</strong><br>"+
 
-        " | "+
+            product[4]+" | "+
 
-        product.size+
+            product[6]+"<br>"+
 
-        "<br>"+
+            "$"+Number(product[8]).toFixed(2)+
 
-        "$"+product.price.toFixed(2)+
+            " | On Hand: "+product[9];
 
-        " | On Hand: "+product.onHand;
-
-        card.onclick=function(){
-
-            addToCart(product);
-
-        };
-
-        div.appendChild(card);
+        results.appendChild(card);
 
     });
 
 }
 
-
-/* ==========================================================
+/* ==========================================
    CART
-========================================================== */
+========================================== */
 
 function addToCart(product){
 
     const existing =
-        cart.find(item=>item.id===product.id);
+    cart.find(item => item.sku == product[1]);
 
     if(existing){
 
         existing.qty++;
 
-    }
-
-    else{
+    }else{
 
         cart.push({
 
-            id:product.id,
+            sku:product[1],
 
-            sku:product.sku,
+            name:product[5],
 
-            category:product.category,
+            collection:product[4],
 
-            design:product.design,
+            size:product[6],
 
-            collection:product.collection,
-
-            name:product.name,
-
-            size:product.size,
-
-            cost:product.cost,
-
-            price:product.price,
+            price:Number(product[8]),
 
             qty:1
 
@@ -177,30 +102,29 @@ function addToCart(product){
 
 }
 
-
 function refreshCart(){
 
-    const div =
+    const cartDiv =
         document.getElementById("cartItems");
 
-    div.innerHTML="";
+    cartDiv.innerHTML="";
 
-    let subtotal=0;
+    let total=0;
 
-    let items=0;
+    let count=0;
 
     cart.forEach(item=>{
 
-        subtotal += item.price * item.qty;
+        total += item.price*item.qty;
 
-        items += item.qty;
+        count += item.qty;
 
-        const row =
+        const div =
             document.createElement("div");
 
-        row.className="cart-item";
+        div.className="cart-item";
 
-        row.innerHTML=
+        div.innerHTML=
 
         "<div>"+
 
@@ -208,9 +132,7 @@ function refreshCart(){
 
         item.collection+
 
-        " "+
-
-        item.size+
+        " "+item.size+
 
         "</div>"+
 
@@ -218,60 +140,21 @@ function refreshCart(){
 
         item.qty+
 
-        " × $"+
-
-        item.price.toFixed(2)+
+        " x $"+item.price.toFixed(2)+
 
         "</div>";
 
-        div.appendChild(row);
+        cartDiv.appendChild(div);
 
     });
 
-    document.getElementById("itemCount").innerHTML=items;
+    document.getElementById("itemCount").innerHTML=count;
 
-    document.getElementById("subtotal").innerHTML=subtotal.toFixed(2);
+    document.getElementById("subtotal").innerHTML=total.toFixed(2);
 
     document.getElementById("tax").innerHTML="0.00";
 
-    document.getElementById("total").innerHTML=subtotal.toFixed(2);
-
-}
-
-
-/* ==========================================================
-   COMPLETE SALE
-========================================================== */
-
-function completeSale(paymentType){
-
-    if(cart.length===0){
-
-        alert("Cart is empty.");
-
-        return;
-
-    }
-
-    google.script.run
-
-        .withSuccessHandler(function(){
-
-            alert("Sale Completed!");
-
-            cart=[];
-
-            refreshCart();
-
-        })
-
-        .withFailureHandler(function(error){
-
-            alert(error.message);
-
-        })
-
-        .saveSale(cart,paymentType);
+    document.getElementById("total").innerHTML=total.toFixed(2);
 
 }
 

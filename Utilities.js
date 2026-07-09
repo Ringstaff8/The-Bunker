@@ -118,22 +118,20 @@ function booleanToYesNo(value) {
 
 }
 
-
 /**
  * Displays an informational message.
  */
 function showMessage(title, message) {
 
   SpreadsheetApp
-
     .getUi()
-
-    .alert(title, message,
-
-      SpreadsheetApp.getUi().ButtonSet.OK);
+    .alert(
+      title,
+      message,
+      SpreadsheetApp.getUi().ButtonSet.OK
+    );
 
 }
-
 
 /**
  * Displays an error message.
@@ -141,17 +139,22 @@ function showMessage(title, message) {
 function showError(message) {
 
   SpreadsheetApp
-
     .getUi()
-
     .alert(
-
       "The Bunker",
-
       message,
-
       SpreadsheetApp.getUi().ButtonSet.OK
-
     );
+
+}
+
+/**
+ * Includes HTML files.
+ */
+function include(filename) {
+
+  return HtmlService
+    .createHtmlOutputFromFile(filename)
+    .getContent();
 
 }
