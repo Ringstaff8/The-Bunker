@@ -1,0 +1,391 @@
+<style>
+
+/* ==========================================================
+   THE BUNKER
+   styles.html
+   Beta 1.0
+   ========================================================== */
+
+:root{
+
+  --primary:#0057B8;      /* Royal Blue */
+  --primary-dark:#003D82;
+  --success:#28A745;
+  --warning:#F39C12;
+  --danger:#DC3545;
+
+  --background:#F4F6F9;
+  --card:#FFFFFF;
+
+  --text:#222;
+  --border:#D8DCE3;
+
+  --radius:12px;
+
+  --shadow:0 3px 10px rgba(0,0,0,.12);
+
+  --transition:.2s;
+
+}
+
+/* ---------- Page ---------- */
+
+body{
+
+    margin:0;
+    padding:25px;
+
+    background:var(--background);
+
+    color:var(--text);
+
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+
+.container{
+
+    max-width:1400px;
+
+    margin:auto;
+
+}
+
+h1{
+
+    margin:0 0 20px 0;
+
+    color:var(--primary);
+
+    font-size:32px;
+
+}
+
+h2{
+
+    margin:0;
+
+}
+
+h3{
+
+    margin:0 0 10px;
+
+}
+
+/* ---------- Dashboard ---------- */
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+    gap:20px;
+
+    margin-bottom:30px;
+
+}
+
+.tile{
+
+    background:white;
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+
+    padding:25px;
+
+    text-align:center;
+
+}
+
+.tile h2{
+
+    color:var(--primary);
+
+    font-size:34px;
+
+}
+
+.tile p{
+
+    margin-top:8px;
+
+    color:#666;
+
+}
+
+/* ---------- Buttons ---------- */
+
+.button-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:20px;
+
+    margin-bottom:35px;
+
+}
+
+button{
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+    font-size:18px;
+
+    font-weight:bold;
+
+}
+
+.main-button{
+
+    background:var(--primary);
+
+    color:white;
+
+    height:120px;
+
+    font-size:22px;
+
+}
+
+.main-button:hover{
+
+    background:var(--primary-dark);
+
+    transform:translateY(-3px);
+
+}
+
+.primary-btn{
+
+    background:var(--primary);
+
+    color:white;
+
+    padding:12px 18px;
+
+}
+
+.success-btn{
+
+    background:var(--success);
+
+    color:white;
+
+    padding:12px 18px;
+
+}
+
+.warning-btn{
+
+    background:var(--warning);
+
+    color:white;
+
+    padding:12px 18px;
+
+}
+
+.danger-btn{
+
+    background:var(--danger);
+
+    color:white;
+
+    padding:12px 18px;
+
+}
+
+/* ---------- Cards ---------- */
+
+.card{
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:var(--shadow);
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+}
+
+/* ---------- Search ---------- */
+
+.search-box{
+
+    width:100%;
+
+    font-size:18px;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    border:1px solid var(--border);
+
+    box-sizing:border-box;
+
+}
+
+/* ---------- Products ---------- */
+
+.product-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+
+    gap:15px;
+
+    margin-top:20px;
+
+}
+
+.product-card{
+
+    background:white;
+
+    border-radius:10px;
+
+    box-shadow:var(--shadow);
+
+    padding:18px;
+
+    cursor:pointer;
+
+    transition:.15s;
+
+}
+
+.product-card:hover{
+
+    transform:translateY(-2px);
+
+    background:#EEF5FF;
+
+}
+
+.product-card strong{
+
+    color:var(--primary);
+
+}
+
+/* ---------- Cart ---------- */
+
+.cart{
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:var(--shadow);
+
+    padding:20px;
+
+}
+
+.cart-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:10px 0;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.cart-total{
+
+    font-size:24px;
+
+    font-weight:bold;
+
+    color:var(--primary);
+
+    margin-top:15px;
+
+}
+
+/* ---------- Tables ---------- */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+th{
+
+    background:var(--primary);
+
+    color:white;
+
+    padding:12px;
+
+}
+
+td{
+
+    padding:10px;
+
+    border-bottom:1px solid #eee;
+
+}
+
+/* ---------- Inputs ---------- */
+
+input,
+select{
+
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid var(--border);
+
+    border-radius:8px;
+
+    box-sizing:border-box;
+
+}
+
+/* ---------- Responsive ---------- */
+
+@media(max-width:900px){
+
+.button-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+.dashboard-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+}
+
+</style>

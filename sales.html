@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <base target="_top">
+
+  <?!= include('styles'); ?>
+  <?!= include('javascript'); ?>
+
+  <title>The Bunker - Ring Up Sale</title>
+
+</head>
+
+<body>
+
+<div class="header">
+
+    🛒 THE BUNKER
+
+    <br>
+
+    <span style="font-size:18px;font-weight:normal;">
+
+        Ring Up Sale
+
+    </span>
+
+</div>
+
+<div class="sales-layout">
+
+    <!-- LEFT SIDE -->
+
+    <div class="left-panel">
+
+        <h2>🔍 Search Products</h2>
+
+        <input
+
+id="searchBox"
+
+type="text"
+
+placeholder="Search products..."
+
+onkeyup="searchProducts()"
+
+><div
+id="productResults"
+style="margin-top:20px;">
+</div>
+
+        <br><br>
+
+        <h2>Browse Collections</h2>
+
+        <div class="collection-grid">
+
+            <button class="tile">
+                🌪️<br><br>School Spirit
+            </button>
+
+            <button class="tile">
+                ❤️<br><br>Amistad
+            </button>
+
+            <button class="tile">
+                💚<br><br>Isibindi
+            </button>
+
+            <button class="tile">
+                💙<br><br>Rêveur
+            </button>
+
+            <button class="tile">
+                🖤<br><br>Altruismo
+            </button>
+
+        </div>
+
+        <br>
+
+        <h2>Products</h2>
+
+        <div class="product-grid">
+
+            <button class="product-btn">
+                👕<br><br>T-Shirts
+            </button>
+
+            <button class="product-btn">
+                🧥<br><br>Hoodies
+            </button>
+
+            <button class="product-btn">
+                🎒<br><br>Bags
+            </button>
+
+            <button class="product-btn">
+                ☕<br><br>Cups
+            </button>
+
+            <button class="product-btn">
+                🧦<br><br>Socks
+            </button>
+
+            <button class="product-btn">
+                🏷️<br><br>Stickers
+            </button>
+
+        </div>
+
+        <br>
+
+        <h2>Sizes</h2>
+
+        <div class="size-grid">
+
+            <button class="size-btn">YS</button>
+            <button class="size-btn">YM</button>
+            <button class="size-btn">YL</button>
+            <button class="size-btn">YXL</button>
+
+            <button class="size-btn">S</button>
+            <button class="size-btn">M</button>
+            <button class="size-btn">L</button>
+            <button class="size-btn">XL</button>
+
+            <button class="size-btn">2X</button>
+            <button class="size-btn">3X</button>
+            <button class="size-btn">4X</button>
+            <button class="size-btn">5X</button>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+
+    <div class="right-panel">
+
+        <div class="cart">
+
+            <div class="cart-title">
+
+                🛒 Current Cart
+
+            </div>
+
+            <div id="cartItems">
+
+                <div class="cart-item">
+
+                    <span>No items added.</span>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <p><strong>Items:</strong> <span id="itemCount">0</span></p>
+
+            <p><strong>Subtotal:</strong> $<span id="subtotal">0.00</span></p>
+
+            <p><strong>Tax:</strong> $<span id="tax">0.00</span></p>
+
+            <div class="cart-total">
+
+                Total: $<span id="total">0.00</span>
+
+            </div>
+
+            <br>
+
+            <h3>Payment</h3>
+
+            <button
+class="primary-btn"
+onclick="completeSale('Cash')">
+
+💵 Cash
+
+</button>
+
+            <button
+class="primary-btn"
+onclick="completeSale('Card')">
+
+💳 Card
+
+</button>
+
+           <button
+class="primary-btn"
+onclick="completeSale('Online')">
+
+🌐 Online
+
+</button>
+
+            <br>
+
+            <button
+class="success-btn primary-btn"
+onclick="completeSale('Promotional')">
+
+            <button class="warning-btn primary-btn">
+                💾 Save Draft
+            </button>
+
+            <button class="danger-btn primary-btn">
+                ❌ Clear Cart
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div style="text-align:center;padding:20px;color:#888;font-size:12px;">
+
+    The Bunker v<?= APP.VERSION ?>
+
+</div>
+
+</body>
+
+</html>

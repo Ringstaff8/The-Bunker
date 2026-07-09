@@ -1,0 +1,278 @@
+<script>
+
+/* ==========================================================
+   THE BUNKER
+   javascript.html
+   Beta 1.0
+========================================================== */
+
+let products = [];
+let cart = [];
+
+/* ==========================================================
+   INITIALIZE
+========================================================== */
+
+window.onload = function(){
+
+    google.script.run
+
+        .withSuccessHandler(function(data){
+
+            products = data;
+
+            renderProducts(products);
+
+        })
+
+        .loadProducts();
+
+};
+
+
+/* ==========================================================
+   SEARCH
+========================================================== */
+
+function searchProducts(){
+
+    const text = document
+        .getElementById("searchBox")
+        .value
+        .toLowerCase()
+        .trim();
+
+    if(text===""){
+
+        renderProducts(products);
+
+        return;
+
+    }
+
+    const filtered = products.filter(product=>{
+
+        return (
+
+            product.sku.toLowerCase().includes(text) ||
+
+            product.category.toLowerCase().includes(text) ||
+
+            String(product.design).toLowerCase().includes(text) ||
+
+            String(product.collection).toLowerCase().includes(text) ||
+
+            product.name.toLowerCase().includes(text) ||
+
+            String(product.size).toLowerCase().includes(text)
+
+        );
+
+    });
+
+    renderProducts(filtered);
+
+}
+
+
+/* ==========================================================
+   PRODUCT LIST
+========================================================== */
+
+function renderProducts(list){
+
+    const div =
+        document.getElementById("productResults");
+
+    div.innerHTML="";
+
+    if(list.length===0){
+
+        div.innerHTML="<p>No products found.</p>";
+
+        return;
+
+    }
+
+    list.forEach(product=>{
+
+        const card =
+            document.createElement("div");
+
+        card.className="product-card";
+
+        card.innerHTML=
+
+        "<strong>"+product.name+"</strong><br>"+
+
+        product.collection+
+
+        " | "+
+
+        product.size+
+
+        "<br>"+
+
+        "$"+product.price.toFixed(2)+
+
+        " | On Hand: "+product.onHand;
+
+        card.onclick=function(){
+
+            addToCart(product);
+
+        };
+
+        div.appendChild(card);
+
+    });
+
+}
+
+
+/* ==========================================================
+   CART
+========================================================== */
+
+function addToCart(product){
+
+    const existing =
+        cart.find(item=>item.id===product.id);
+
+    if(existing){
+
+        existing.qty++;
+
+    }
+
+    else{
+
+        cart.push({
+
+            id:product.id,
+
+            sku:product.sku,
+
+            category:product.category,
+
+            design:product.design,
+
+            collection:product.collection,
+
+            name:product.name,
+
+            size:product.size,
+
+            cost:product.cost,
+
+            price:product.price,
+
+            qty:1
+
+        });
+
+    }
+
+    refreshCart();
+
+}
+
+
+function refreshCart(){
+
+    const div =
+        document.getElementById("cartItems");
+
+    div.innerHTML="";
+
+    let subtotal=0;
+
+    let items=0;
+
+    cart.forEach(item=>{
+
+        subtotal += item.price * item.qty;
+
+        items += item.qty;
+
+        const row =
+            document.createElement("div");
+
+        row.className="cart-item";
+
+        row.innerHTML=
+
+        "<div>"+
+
+        "<strong>"+item.name+"</strong><br>"+
+
+        item.collection+
+
+        " "+
+
+        item.size+
+
+        "</div>"+
+
+        "<div>"+
+
+        item.qty+
+
+        " × $"+
+
+        item.price.toFixed(2)+
+
+        "</div>";
+
+        div.appendChild(row);
+
+    });
+
+    document.getElementById("itemCount").innerHTML=items;
+
+    document.getElementById("subtotal").innerHTML=subtotal.toFixed(2);
+
+    document.getElementById("tax").innerHTML="0.00";
+
+    document.getElementById("total").innerHTML=subtotal.toFixed(2);
+
+}
+
+
+/* ==========================================================
+   COMPLETE SALE
+========================================================== */
+
+function completeSale(paymentType){
+
+    if(cart.length===0){
+
+        alert("Cart is empty.");
+
+        return;
+
+    }
+
+    google.script.run
+
+        .withSuccessHandler(function(){
+
+            alert("Sale Completed!");
+
+            cart=[];
+
+            refreshCart();
+
+        })
+
+        .withFailureHandler(function(error){
+
+            alert(error.message);
+
+        })
+
+        .saveSale(cart,paymentType);
+
+}
+
+</script>

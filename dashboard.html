@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <base target="_top">
+
+  <?!= HtmlService.createHtmlOutputFromFile('styles').getContent(); ?>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🌪️ The Bunker Dashboard</h1>
+
+    <div class="dashboard-grid">
+
+        <div class="tile">
+            <h2 id="products">0</h2>
+            <p>Products</p>
+        </div>
+
+        <div class="tile">
+            <h2 id="inventoryValue">$0.00</h2>
+            <p>Inventory Value</p>
+        </div>
+
+        <div class="tile">
+            <h2 id="lowStock">0</h2>
+            <p>Low Stock</p>
+        </div>
+
+        <div class="tile">
+            <h2 id="todaysSales">$0.00</h2>
+            <p>Today's Sales</p>
+        </div>
+
+        <div class="tile">
+            <h2 id="todaysProfit">$0.00</h2>
+            <p>Today's Profit</p>
+        </div>
+
+        <div class="tile">
+            <h2 id="promoToday">0</h2>
+            <p>Promotional Today</p>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+window.onload = function(){
+
+    google.script.run
+
+        .withSuccessHandler(loadDashboard)
+
+        .getDashboardStats();
+
+}
+
+function loadDashboard(stats){
+
+    document.getElementById("products").innerHTML =
+        stats.totalProducts;
+
+    document.getElementById("inventoryValue").innerHTML =
+        "$" + Number(stats.inventoryValue).toFixed(2);
+
+    document.getElementById("lowStock").innerHTML =
+        stats.lowStock;
+
+    document.getElementById("todaysSales").innerHTML =
+        "$" + Number(stats.todaysSales).toFixed(2);
+
+    document.getElementById("todaysProfit").innerHTML =
+        "$" + Number(stats.todaysProfit).toFixed(2);
+
+    document.getElementById("promoToday").innerHTML =
+        stats.promotionalToday;
+
+}
+
+</script>
+
+</body>
+</html>
