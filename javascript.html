@@ -101,6 +101,17 @@ function addToCart(product){
     refreshCart();
 
 }
+function removeFromCart(sku){
+
+    cart = cart.filter(function(item){
+
+        return item.sku !== sku;
+
+    });
+
+    refreshCart();
+
+}
 
 function refreshCart(){
 
@@ -223,5 +234,29 @@ function completeSale(paymentType){
         .saveSale(cart, paymentType);
 
 }
+function searchCollection(collection){
 
+    document.getElementById("searchBox").value = collection;
+
+    searchProducts();
+
+}
+const promo = {
+
+    student:
+        document.getElementById("studentName").value,
+
+    product:
+        document.getElementById("product").value,
+
+    quantity:
+        Number(document.getElementById("quantity").value),
+
+    reason:
+        document.getElementById("reason").value,
+
+    notes:
+        document.getElementById("notes").value
+
+};
 </script>
