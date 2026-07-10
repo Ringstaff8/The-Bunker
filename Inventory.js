@@ -66,20 +66,3 @@ function loadInventoryProducts() {
   return getActiveProducts();
 
 }
-function getPromotionalProducts() {
-
-  const ss = SpreadsheetApp.getActive();
-  const sheet = ss.getSheetByName("Inventory");
-
-  const data = sheet.getDataRange().getValues();
-
-  data.shift(); // Remove header row
-
-  return data
-    .filter(row => row[/* Qty Column */] > 0)
-    .map(row => ({
-      sku: row[/* SKU Column */],
-      name: row[/* Product Name Column */]
-    }));
-
-}

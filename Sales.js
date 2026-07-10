@@ -45,11 +45,6 @@ function saveSale(cart,paymentType){
 }
 
 
-/**
- * Returns all active products.
- */
-function loadProducts(){
-
+function loadProducts() {
   return getActiveProducts();
-
 }

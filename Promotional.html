@@ -102,7 +102,41 @@ function submitPromo(){
         .savePromotionInfo(promo);
 
 }
+google.script.run
+    .withSuccessHandler(function(products) {
 
+    const select = document.getElementById("product");
+
+    select.innerHTML = "";
+
+    products.forEach(function(product) {
+
+        const option = document.createElement("option");
+
+        option.text = product[5];
+
+        select.add(option);
+
+    });
+
+})
+google.script.run
+    .withSuccessHandler(function(products){
+       const select = document.getElementById("product");
+
+select.innerHTML = "";
+
+products.forEach(function(product) {
+
+    const option = document.createElement("option");
+
+    option.text = product[5];
+
+    select.add(option);
+
+});
+    })
+    .loadProducts();
 </script>
 
 </body>
