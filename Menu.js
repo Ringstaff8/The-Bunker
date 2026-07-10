@@ -15,13 +15,21 @@ function createBunkerMenu() {
     // Main Screens
     .addItem("🏠 Dashboard", "showDashboard")
     .addItem("🛒 Ring Up Sale", "showSales")
-    .addItem("📦 Receive Inventory", "showReceiving")
     .addItem("🎁 Promotional Items", "showPromotional")
 
     .addSeparator()
 
-    // Management
-    .addItem("📋 Products", "showProducts")
+    // Inventory
+    .addSubMenu(
+      ui.createMenu("📦 Inventory")
+        .addItem("📋 Products", "showProducts")
+        .addItem("📥 Receive Inventory", "showReceiving")
+        .addItem("🔄 Inventory Adjustment", "showInventoryAdjustment")
+    )
+
+    .addSeparator()
+
+    // Analytics
     .addItem("📊 Reports", "showReports")
     .addItem("⚙️ Settings", "showSettings")
 
@@ -38,13 +46,13 @@ function createBunkerMenu() {
     .addToUi();
 
 }
-
-
 /* ==========================================================
    PLACEHOLDER FUNCTIONS
    These prevent menu errors while Beta 1 is under construction.
    Replace them later with real implementations.
 ========================================================== */
+
+
 
 function showPromotional() {
 
@@ -74,6 +82,13 @@ function showSettings() {
 
   SpreadsheetApp.getUi().alert(
     "🚧 Settings\n\nComing in Beta 2."
+  );
+
+}
+function showReceiving() {
+
+  SpreadsheetApp.getUi().alert(
+    "🚧 Receive Inventory\n\nComing in Beta 0.8."
   );
 
 }

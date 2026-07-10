@@ -92,9 +92,11 @@ function submitPromo() {
     };
 
     google.script.run
-        .withSuccessHandler(function (result) {
+       .withSuccessHandler(function () {
 
-    alert(result);
+    alert("Promotional giveaway completed successfully.");
+
+    google.script.host.close();
 
 })
 
