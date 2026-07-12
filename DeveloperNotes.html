@@ -1,88 +1,73 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <base target="_top">
-  </head>
-  <body>
-    <!--
 =====================================================
 THE BUNKER
 Developer Notes
 =====================================================
 
-Project Owner:
-Jessica Ringstaff
+Current Version
+---------------
+Beta 0.8
 
-School:
-Paducah Middle School
+Project Status
+--------------
+Core inventory system is operational.
 
-Purpose:
-Inventory & Point of Sale System
-
-=====================================================
-BUILD HISTORY
-=====================================================
-
-Build 001
+Completed
 ---------
-✓ Created Apps Script Project
-✓ Created Dashboard
-✓ Created Menu
-✓ First HTML Window
+✓ Dashboard
+✓ POS Sales
+✓ Inventory Sessions
+✓ Physical Inventory Count
+✓ Save Inventory Count
+✓ Promotional Items
+✓ Inventory Count Details
+✓ Session Progress Tracking
 
------------------------------------------------------
+Current Development
+-------------------
+Resume Inventory Count
 
-Build 002
----------
-✓ Created styles.html
-✓ Created javascript.html
-✓ Created Sales.gs
+Architecture
+------------
+Dashboard
+    Dashboard.gs
+    dashboard.html
 
------------------------------------------------------
+Sales
+    Sales.gs
+    sales.html
+
+Inventory
+    Inventory.js
+    inventoryCount.html
+    InventorySessions.js
+
+Database
+    Database.js
+
+Utilities
+    Utilities.js
+
+Menu
+    Menu.js
 
 Current Goal
 ------------
-Build a functional Ring Up Sale screen.
+Resume Inventory Count
 
-=====================================================
-FILES
-=====================================================
+Next Features
+-------------
+☐ Resume Inventory Count
+☐ Apply Inventory Count
+☐ Close Inventory Session
+☐ Inventory Adjustments
+☐ Receiving Inventory
+☐ Reports
+☐ Settings
 
-Code.gs
-    Starts application
-
-Dashboard.gs
-    Opens dashboard
-
-Sales.gs
-    Sales logic
-
-styles.html
-    Global CSS
-
-javascript.html
-    Shared JavaScript
-
-dashboard.html
-    Dashboard UI
-
-=====================================================
-TODO
-=====================================================
-
-☐ Product Search
-
-☐ Shopping Cart
-
-☐ Inventory Deduction
-
-☐ Transactions
-
-☐ Dashboard Updates
-
-☐ Password Protected Promotional Items
-
-=====================================================
--->
-  </body>
-</html>
+Development Rules
+-----------------
+✓ One change = one test
+✓ HTML: replace entire file
+✓ Apps Script: replace entire function
+✓ Reuse helper functions
+✓ Git commit after completed features

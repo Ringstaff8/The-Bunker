@@ -14,15 +14,8 @@
 <div class="container">
 
     <h2>📋 Inventory Count</h2>
-   <div id="sessionInfo" style="
-    margin-bottom:15px;
-    padding:8px;
-    background:#eef5ff;
-    border:1px solid #c5d8ff;
-    border-radius:4px;
-    font-size:12px;
-    display:none;">
-</div>
+
+    
 
     <label><strong>Category</strong></label><br>
 
@@ -45,29 +38,26 @@
 
     </table>
 
-    <br>
+    <br><br>
 
-    <br>
+    <button onclick="saveInventoryCountClicked()">
+        Save Inventory Count
+    </button>
 
-<button onclick="saveInventoryCountClicked()">
-    Save Inventory Count
+    <button onclick="applyInventoryCountClicked()">
+    Apply Inventory Count
 </button>
 
-<button onclick="google.script.host.close()">
-    Close
-</button>
+    <button onclick="google.script.host.close()">
+        Close
+    </button>
 
 </div>
 
-
-
 <script>
 
-let currentSession = null;
+
 let currentProducts = [];
-
-
-
 
 function updateDifference(input) {
 
@@ -91,6 +81,7 @@ function updateDifference(input) {
     }
 
 }
+
 function loadCategory() {
 
     const category = document.getElementById("category").value;
@@ -124,22 +115,33 @@ function loadCategory() {
                 countedCell.innerHTML =
                     `<input
                         type="number"
-                        value="${product.onHand}"
+                        value="${product.countedQty}"
                         style="width:70px;text-align:center"
                         oninput="updateDifference(this)">`;
 
                 countedCell.style.textAlign = "center";
 
                 const diffCell = document.createElement("td");
-                diffCell.textContent = "0";
-                diffCell.style.textAlign = "center";
 
-                row.appendChild(productCell);
-                row.appendChild(systemCell);
-                row.appendChild(countedCell);
-                row.appendChild(diffCell);
+const difference =
+    Number(product.countedQty) - Number(product.onHand);
 
-                tbody.appendChild(row);
+diffCell.textContent = difference;
+diffCell.style.textAlign = "center";
+
+row.appendChild(productCell);
+row.appendChild(systemCell);
+row.appendChild(countedCell);
+row.appendChild(diffCell);
+
+if (difference > 0) {
+    row.style.backgroundColor = "#d4edda";
+}
+else if (difference < 0) {
+    row.style.backgroundColor = "#f8d7da";
+}
+
+tbody.appendChild(row);
 
             });
 
@@ -147,6 +149,8 @@ function loadCategory() {
         .loadProductsByCategory(category);
 
 }
+
+
 
 google.script.run
     .withSuccessHandler(function(categories){
@@ -173,24 +177,30 @@ google.script.run
 
 document.getElementById("category").addEventListener("change", loadCategory);
 
+// initializeInventorySession();
+
 function saveInventoryCountClicked() {
+
+    const button = event.target;
+    button.disabled = true;
 
     const category = document.getElementById("category").value;
 
     const rows = [];
 
-    const tableRows = document.querySelectorAll("#productTable tbody tr");
+    const tableRows =
+        document.querySelectorAll("#productTable tbody tr");
 
     tableRows.forEach(function(row, index) {
-
-        const countedQty = Number(row.querySelector("input").value);
 
         rows.push({
 
             productId: currentProducts[index].productId,
             sku: currentProducts[index].sku,
             systemQty: currentProducts[index].onHand,
-            countedQty: countedQty
+            countedQty: Number(
+                row.querySelector("input").value
+            )
 
         });
 
@@ -198,6 +208,8 @@ function saveInventoryCountClicked() {
 
     google.script.run
         .withSuccessHandler(function(result) {
+
+            button.disabled = false;
 
             alert(
                 result.recordsSaved +
@@ -208,6 +220,8 @@ function saveInventoryCountClicked() {
         })
         .withFailureHandler(function(error) {
 
+            button.disabled = false;
+
             alert(error.message);
 
         })
@@ -215,7 +229,36 @@ function saveInventoryCountClicked() {
 
 }
 
+function applyInventoryCountClicked() {
 
+    const confirmed = confirm(
+        "This will update your inventory using the saved physical counts.\n\n" +
+        "This action cannot be undone.\n\n" +
+        "Continue?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    google.script.run
+        .withSuccessHandler(function(result) {
+
+            alert(
+    "Inventory Count Applied Successfully\n\n" +
+    result.updated + " products processed\n" +
+    result.adjustments + " inventory adjustments recorded"
+);
+
+        })
+        .withFailureHandler(function(error) {
+
+            alert(error.message);
+
+        })
+        .applyInventoryCount();
+
+}
 </script>
 
 </body>

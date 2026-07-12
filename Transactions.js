@@ -137,3 +137,83 @@ function completeSale(cart, paymentType) {
   return true;
 
 }
+
+function createInventoryAdjustment(product, difference) {
+
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const transactionSheet = ss.getSheetByName("Transactions");
+
+  const transactionID = Utilities.getUuid();
+
+  const now = new Date();
+
+  const transactionDate = Utilities.formatDate(
+    now,
+    Session.getScriptTimeZone(),
+    "MM/dd/yyyy"
+  );
+
+  const transactionTime = Utilities.formatDate(
+    now,
+    Session.getScriptTimeZone(),
+    "hh:mm:ss a"
+  );
+
+  transactionSheet.appendRow([
+
+    transactionID,                          // A Transaction ID
+
+    "Inventory Adjustment",                 // B Transaction Type
+
+    transactionDate,                        // C Date
+
+    transactionTime,                        // D Time
+
+    product.productId,                      // E Product ID
+
+    product.sku,                            // F SKU
+
+    product.category,                       // G Category
+
+    product.design,                         // H Design
+
+    product.collection,                     // I Collection
+
+    product.name,                           // J Product Name
+
+    product.size,                           // K Size
+
+    difference,                             // L Quantity (+/- Adjustment)
+
+    product.cost,                           // M Cost
+
+    0,                                      // N Price
+
+    0,                                      // O Profit
+
+    "Inventory",                            // P Payment Type
+
+    Session.getActiveUser().getEmail(),     // Q User
+
+    "Physical Inventory Count"              // R Notes
+
+  ]);
+
+}
+
+function testCreateInventoryAdjustment() {
+
+  createInventoryAdjustment({
+
+    productId: 9999,
+    sku: "TEST-001",
+    category: "Test",
+    design: "Test",
+    collection: "Test",
+    name: "Inventory Test",
+    size: "NA",
+    cost: 1.25
+
+  }, -2);
+
+}

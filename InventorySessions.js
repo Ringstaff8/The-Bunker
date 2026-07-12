@@ -34,7 +34,7 @@ function createInventorySession() {
     sessionId,
     now,
     user,
-    "0 / 0 Categories",
+   "0 / " + loadCategories().length + " Categories",
     "OPEN",
     now,
     ""
@@ -236,3 +236,143 @@ function testGetOrCreateInventorySession() {
 
   }
 }
+function getCurrentInventorySession() {
+
+  const session = getOrCreateInventorySession();
+
+  Logger.log("getCurrentInventorySession called");
+  Logger.log(JSON.stringify(session));
+
+  return session;
+
+}
+
+function testGetCurrentInventorySession() {
+
+  const session = getCurrentInventorySession();
+
+  Logger.log(session);
+
+}
+
+function applyInventoryCount() {
+
+  const session = getOpenInventorySession();
+
+  if (!session) {
+    throw new Error("No open inventory session found.");
+  }
+
+  const detailSheet = getInventoryCountDetailsSheet();
+  const detailData = detailSheet.getDataRange().getValues();
+
+  const productsSheet = getProductsSheet();
+  const productData = productsSheet.getDataRange().getValues();
+
+  const sessionSheet = getInventorySessionsSheet();
+  const sessionData = sessionSheet.getDataRange().getValues();
+
+  let updated = 0;
+  let adjustments = 0;
+
+  for (let i = 1; i < detailData.length; i++) {
+
+    if (
+      detailData[i][INVENTORY_DETAIL_COLUMNS.SESSION_ID] !== session.sessionId
+    ) {
+      continue;
+    }
+
+    const productId =
+      detailData[i][INVENTORY_DETAIL_COLUMNS.PRODUCT_ID];
+
+    const systemQty =
+      Number(detailData[i][INVENTORY_DETAIL_COLUMNS.SYSTEM_QTY]);
+
+    const countedQty =
+      Number(detailData[i][INVENTORY_DETAIL_COLUMNS.COUNTED_QTY]);
+
+    const difference = countedQty - systemQty;
+
+    for (let p = 1; p < productData.length; p++) {
+
+      if (productData[p][PRODUCT_COLUMNS.ID] === productId) {
+
+        // Update inventory
+        productsSheet.getRange(
+          p + 1,
+          PRODUCT_COLUMNS.ONHAND + 1
+        ).setValue(countedQty);
+
+        updated++;
+
+        // Record adjustment only if inventory changed
+        if (difference !== 0) {
+
+          createInventoryAdjustment({
+
+            productId: productData[p][PRODUCT_COLUMNS.ID],
+            sku: productData[p][PRODUCT_COLUMNS.SKU],
+            category: productData[p][PRODUCT_COLUMNS.CATEGORY],
+            design: productData[p][PRODUCT_COLUMNS.DESIGN],
+            collection: productData[p][PRODUCT_COLUMNS.COLLECTION],
+            name: productData[p][PRODUCT_COLUMNS.NAME],
+            size: productData[p][PRODUCT_COLUMNS.SIZE],
+            cost: Number(productData[p][PRODUCT_COLUMNS.COST])
+
+          }, difference);
+
+          adjustments++;
+
+        }
+
+        break;
+
+      }
+
+    }
+
+  }
+
+  // Mark session completed
+  for (let i = 1; i < sessionData.length; i++) {
+
+    if (
+      sessionData[i][INVENTORY_SESSION_COLUMNS.SESSION_ID] === session.sessionId
+    ) {
+
+      sessionSheet.getRange(
+        i + 1,
+        INVENTORY_SESSION_COLUMNS.STATUS + 1
+      ).setValue("COMPLETED");
+
+      sessionSheet.getRange(
+        i + 1,
+        INVENTORY_SESSION_COLUMNS.COMPLETED + 1
+      ).setValue(new Date());
+
+      sessionSheet.getRange(
+        i + 1,
+        INVENTORY_SESSION_COLUMNS.LAST_UPDATED + 1
+      ).setValue(new Date());
+
+      break;
+
+    }
+
+  }
+
+  return {
+
+    success: true,
+    updated: updated,
+    adjustments: adjustments
+
+  };
+
+}
+
+function testApplyInventoryCount() {
+  Logger.log(applyInventoryCount());
+}
+
