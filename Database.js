@@ -95,3 +95,46 @@ function testSearch(){
   Logger.log(results);
 
 }
+function getInventorySessionsSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  let sheet = ss.getSheetByName("Inventory Sessions");
+
+  if (!sheet) {
+    sheet = ss.insertSheet("Inventory Sessions");
+
+    sheet.appendRow([
+      "Session ID",
+      "Started",
+      "Started By",
+      "Status",
+      "Last Updated",
+      "Completed"
+    ]);
+  }
+
+  return sheet;
+}
+
+function getInventoryCountDetailsSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  let sheet = ss.getSheetByName("Inventory Count Details");
+
+  if (!sheet) {
+    sheet = ss.insertSheet("Inventory Count Details");
+
+    sheet.appendRow([
+      "Session ID",
+      "Category",
+      "Product ID",
+      "SKU",
+      "System Qty",
+      "Counted Qty",
+      "Difference",
+      "Saved"
+    ]);
+  }
+
+  return sheet;
+}

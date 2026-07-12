@@ -21,11 +21,12 @@ function createBunkerMenu() {
 
     // Inventory
     .addSubMenu(
-      ui.createMenu("📦 Inventory")
-        .addItem("📋 Products", "showProducts")
-        .addItem("📥 Receive Inventory", "showReceiving")
-        .addItem("🔄 Inventory Adjustment", "showInventoryAdjustment")
-    )
+  ui.createMenu("📦 Inventory")
+    .addItem("📋 Products", "showProducts")
+    .addItem("📥 Receive Inventory", "showReceiving")
+    .addItem("📋 Physical Inventory Count", "showInventoryCount")
+    .addItem("🔄 Inventory Adjustment", "showInventoryAdjustment")
+)
 
     .addSeparator()
 

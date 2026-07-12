@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <base target="_top">
+
+  <?!= HtmlService.createHtmlOutputFromFile('styles').getContent(); ?>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>📋 Inventory Count</h2>
+   <div id="sessionInfo" style="
+    margin-bottom:15px;
+    padding:8px;
+    background:#eef5ff;
+    border:1px solid #c5d8ff;
+    border-radius:4px;
+    font-size:12px;
+    display:none;">
+</div>
+
+    <label><strong>Category</strong></label><br>
+
+    <select id="category"></select>
+
+    <br><br>
+
+    <table id="productTable" border="1" width="100%" cellspacing="0" cellpadding="6">
+
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>System</th>
+                <th>Counted</th>
+                <th>Difference</th>
+            </tr>
+        </thead>
+
+        <tbody></tbody>
+
+    </table>
+
+    <br>
+
+    <br>
+
+<button onclick="saveInventoryCountClicked()">
+    Save Inventory Count
+</button>
+
+<button onclick="google.script.host.close()">
+    Close
+</button>
+
+</div>
+
+
+
+<script>
+
+let currentSession = null;
+let currentProducts = [];
+
+
+
+
+function updateDifference(input) {
+
+    const row = input.closest("tr");
+
+    const system = Number(row.cells[1].textContent);
+    const counted = Number(input.value);
+
+    const difference = counted - system;
+
+    row.cells[3].textContent = difference;
+
+    if (difference > 0) {
+        row.style.backgroundColor = "#d4edda";
+    }
+    else if (difference < 0) {
+        row.style.backgroundColor = "#f8d7da";
+    }
+    else {
+        row.style.backgroundColor = "";
+    }
+
+}
+function loadCategory() {
+
+    const category = document.getElementById("category").value;
+
+    google.script.run
+        .withSuccessHandler(function(products) {
+
+            currentProducts = products;
+
+            const tbody = document.querySelector("#productTable tbody");
+
+            tbody.innerHTML = "";
+
+            products.forEach(function(product) {
+
+                const row = document.createElement("tr");
+
+                const productCell = document.createElement("td");
+                productCell.textContent =
+                    product.design + " - " +
+                    product.collection + " - " +
+                    product.name + " - " +
+                    product.size;
+
+                const systemCell = document.createElement("td");
+                systemCell.textContent = product.onHand;
+                systemCell.style.textAlign = "center";
+
+                const countedCell = document.createElement("td");
+
+                countedCell.innerHTML =
+                    `<input
+                        type="number"
+                        value="${product.onHand}"
+                        style="width:70px;text-align:center"
+                        oninput="updateDifference(this)">`;
+
+                countedCell.style.textAlign = "center";
+
+                const diffCell = document.createElement("td");
+                diffCell.textContent = "0";
+                diffCell.style.textAlign = "center";
+
+                row.appendChild(productCell);
+                row.appendChild(systemCell);
+                row.appendChild(countedCell);
+                row.appendChild(diffCell);
+
+                tbody.appendChild(row);
+
+            });
+
+        })
+        .loadProductsByCategory(category);
+
+}
+
+google.script.run
+    .withSuccessHandler(function(categories){
+
+        const select = document.getElementById("category");
+
+        select.innerHTML = "";
+
+        categories.forEach(function(category){
+
+            const option = document.createElement("option");
+
+            option.value = category;
+            option.text = category;
+
+            select.appendChild(option);
+
+        });
+
+        loadCategory();
+
+    })
+    .loadCategories();
+
+document.getElementById("category").addEventListener("change", loadCategory);
+
+function saveInventoryCountClicked() {
+
+    const category = document.getElementById("category").value;
+
+    const rows = [];
+
+    const tableRows = document.querySelectorAll("#productTable tbody tr");
+
+    tableRows.forEach(function(row, index) {
+
+        const countedQty = Number(row.querySelector("input").value);
+
+        rows.push({
+
+            productId: currentProducts[index].productId,
+            sku: currentProducts[index].sku,
+            systemQty: currentProducts[index].onHand,
+            countedQty: countedQty
+
+        });
+
+    });
+
+    google.script.run
+        .withSuccessHandler(function(result) {
+
+            alert(
+                result.recordsSaved +
+                " records saved.\n\n" +
+                result.progress
+            );
+
+        })
+        .withFailureHandler(function(error) {
+
+            alert(error.message);
+
+        })
+        .saveInventoryCount(category, rows);
+
+}
+
+
+</script>
+
+</body>
+
+</html>
