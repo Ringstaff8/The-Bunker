@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <base target="_top">
+
+  <?!= HtmlService.createHtmlOutputFromFile("styles").getContent(); ?>
+
+  <style>
+
+    .reportControls{
+      display:flex;
+      gap:15px;
+      align-items:end;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+
+    .summaryBar{
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+      margin-bottom:25px;
+    }
+
+    .summaryCard{
+      flex:1;
+      min-width:160px;
+      background:white;
+      border-radius:8px;
+      padding:15px;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);
+      text-align:center;
+    }
+
+    .summaryCard h2{
+      margin:0;
+      color:#1a73e8;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    th{
+      background:#1a73e8;
+      color:white;
+      padding:10px;
+      cursor:pointer;
+    }
+
+    td{
+      padding:8px;
+      border-bottom:1px solid #ddd;
+    }
+
+    tr:nth-child(even){
+      background:#f8f8f8;
+    }
+
+    .buttonBar{
+      margin-top:20px;
+      display:flex;
+      gap:10px;
+    }
+
+    @media print{
+
+      .reportControls,
+      .buttonBar{
+        display:none;
+      }
+
+      body{
+        margin:0;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<h2>💰 Sales Report</h2>
+
+<div class="reportControls">
+
+  <div>
+    <label>Start Date</label><br>
+    <input type="date" id="startDate">
+  </div>
+
+  <div>
+    <label>End Date</label><br>
+    <input type="date" id="endDate">
+  </div>
+
+  <div>
+    <button onclick="loadReport()">
+      Generate Report
+    </button>
+  </div>
+
+</div>
+
+<div class="summaryBar">
+
+  <div class="summaryCard">
+    <div>Total Revenue</div>
+    <h2 id="totalRevenue">$0.00</h2>
+  </div>
+
+  <div class="summaryCard">
+    <div>Total Profit</div>
+    <h2 id="totalProfit">$0.00</h2>
+  </div>
+
+  <div class="summaryCard">
+    <div>Transactions</div>
+    <h2 id="transactionCount">0</h2>
+  </div>
+
+  <div class="summaryCard">
+    <div>Units Sold</div>
+    <h2 id="unitsSold">0</h2>
+  </div>
+
+  <div class="summaryCard">
+    <div>Average Sale</div>
+    <h2 id="averageSale">$0.00</h2>
+  </div>
+
+</div>
+
+<table id="salesTable">
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+<th>Product</th>
+<th>Qty</th>
+<th>Revenue</th>
+<th>Profit</th>
+<th>Payment</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+<div class="buttonBar">
+
+<button onclick="window.print()">
+🖨 Print
+</button>
+
+<button disabled>
+📄 Export CSV (Coming Soon)
+</button>
+
+</div>
+
+<script>
+
+function loadReport(){
+
+    // Placeholder for next milestone
+
+}
+
+function showSalesReport() {
+
+  const html = HtmlService
+    .createHtmlOutputFromFile("salesReport")
+    .setWidth(1100)
+    .setHeight(700);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "Sales Report"
+  );
+
+}
+</script>
+
+</body>
+
+</html>

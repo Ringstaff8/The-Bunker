@@ -305,3 +305,87 @@ function showLowStockReport() {
 function testLowStockReport() {
   Logger.log(getLowStockReport());
 }
+
+function showTransactionHistoryReport() {
+
+  const html = HtmlService
+    .createHtmlOutputFromFile("transactionHistory")
+    .setWidth(1200)
+    .setHeight(700);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "Transaction History"
+  );
+
+}
+
+function getTransactionHistory() {
+
+  const sheet = SpreadsheetApp
+    .getActiveSpreadsheet()
+    .getSheetByName("Transactions");
+
+  if (!sheet) {
+    throw new Error("Transactions sheet not found.");
+  }
+
+  const data = sheet.getDataRange().getValues();
+
+  if (data.length <= 1) {
+    return [];
+  }
+
+  // Remove header row
+  data.shift();
+
+  // TEMPORARY TEST
+  // Return only two simple string fields.
+
+return data.map(function(row) {
+
+  return {
+
+    transactionId: String(row[0] || ""),
+    transactionType: String(row[1] || ""),
+    date: String(row[2] || ""),
+    time: String(row[3] || ""),
+    productId: String(row[4] || ""),
+    sku: String(row[5] || ""),
+    category: String(row[6] || ""),
+    design: String(row[7] || ""),
+    productName: String(row[8] || ""),
+    collection: String(row[9] || ""),
+    size: String(row[10] || ""),
+    quantity: Number(row[11]) || 0,
+    cost: Number(row[12]) || 0,
+    price: Number(row[13]) || 0,
+    profit: Number(row[14]) || 0,
+    paymentType: String(row[15] || ""),
+    user: String(row[16] || ""),
+    notes: String(row[17] || "")
+
+  };
+
+});
+}
+
+
+function testTransactionHistory() {
+  Logger.log(getTransactionHistory().length);
+}
+
+function showSalesReport() {
+
+  const html = HtmlService
+    .createTemplateFromFile("salesReport")
+    .evaluate()
+    .setWidth(1100)
+    .setHeight(700);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "Sales Report"
+  );
+
+}

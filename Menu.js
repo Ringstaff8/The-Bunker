@@ -37,10 +37,10 @@ function createBunkerMenu() {
         .addItem("📉 Low Stock Report", "showLowStockReport")
         .addItem("📋 Inventory Variance Report", "showInventoryVarianceReport")
         // Future Reports
-        //.addItem("📜 Transaction History", "showTransactionHistory")
+     .addItem("📜 Transaction History", "showTransactionHistoryReport")
         //.addItem("💰 Sales Report", "showSalesReport")
-        //.addItem("📦 Inventory Valuation", "showInventoryValuation")
-        //.addItem("📝 Inventory Session History", "showInventorySessionHistory")
+//.addItem("📦 Inventory Valuation", "showInventoryValuation")
+//.addItem("📝 Inventory Session History", "showInventorySessionHistory")
     )
 
     .addItem("⚙️ Settings", "showSettings")
