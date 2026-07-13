@@ -179,19 +179,7 @@ function loadReport(){
 
 }
 
-function showSalesReport() {
 
-  const html = HtmlService
-    .createHtmlOutputFromFile("salesReport")
-    .setWidth(1100)
-    .setHeight(700);
-
-  SpreadsheetApp.getUi().showModalDialog(
-    html,
-    "Sales Report"
-  );
-
-}
 </script>
 
 </body>

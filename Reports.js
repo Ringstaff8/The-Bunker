@@ -339,8 +339,6 @@ function getTransactionHistory() {
   // Remove header row
   data.shift();
 
-  // TEMPORARY TEST
-  // Return only two simple string fields.
 
 return data.map(function(row) {
 
@@ -386,6 +384,108 @@ function showSalesReport() {
   SpreadsheetApp.getUi().showModalDialog(
     html,
     "Sales Report"
+  );
+
+}
+
+function getSalesReport(startDate, endDate) {
+
+  const sheet = SpreadsheetApp
+    .getActiveSpreadsheet()
+    .getSheetByName("Transactions");
+
+  if (!sheet) {
+    throw new Error("Transactions sheet not found.");
+  }
+
+  const data = sheet.getDataRange().getValues();
+
+  if (data.length <= 1) {
+    return {
+      totalRevenue: 0,
+      totalProfit: 0,
+      totalUnits: 0,
+      totalTransactions: 0,
+      averageSale: 0,
+      transactions: []
+    };
+  }
+
+  // Remove header row
+  data.shift();
+
+  const start = new Date(startDate);
+  start.setHours(0, 0, 0, 0);
+
+  const end = new Date(endDate);
+  end.setHours(23, 59, 59, 999);
+
+  let totalRevenue = 0;
+  let totalProfit = 0;
+  let totalUnits = 0;
+
+  const transactionIds = new Set();
+  const transactions = [];
+
+  data.forEach(function(row) {
+
+    const transactionDate = new Date(row[2]);
+
+    if (transactionDate < start || transactionDate > end) {
+      return;
+    }
+
+    const quantity = Number(row[11]) || 0;
+    const price = Number(row[13]) || 0;
+    const profit = Number(row[14]) || 0;
+
+    totalRevenue += quantity * price;
+    totalProfit += quantity * profit;
+    totalUnits += quantity;
+
+    transactionIds.add(String(row[0]));
+
+    transactions.push({
+
+      transactionId: String(row[0] || ""),
+      date: row[2],
+      productName: String(row[8] || ""),
+      quantity: quantity,
+      revenue: quantity * price,
+      profit: quantity * profit,
+      paymentType: String(row[15] || "")
+
+    });
+
+  });
+
+  const totalTransactions = transactionIds.size;
+
+  return {
+
+    totalRevenue: totalRevenue,
+    totalProfit: totalProfit,
+    totalUnits: totalUnits,
+    totalTransactions: totalTransactions,
+    averageSale: totalTransactions === 0
+      ? 0
+      : totalRevenue / totalTransactions,
+
+    transactions: transactions
+
+  };
+
+}
+
+function testSalesReport() {
+
+  const report = getSalesReport(
+    "2026-01-01",
+    "2026-12-31"
+  );
+
+  SpreadsheetApp.getUi().alert(
+    JSON.stringify(report, null, 2)
   );
 
 }
