@@ -431,6 +431,7 @@ function getSalesReport(startDate, endDate) {
 
     const transactionDate = new Date(row[2]);
 
+    // Skip rows outside the selected range
     if (transactionDate < start || transactionDate > end) {
       return;
     }
@@ -448,7 +449,12 @@ function getSalesReport(startDate, endDate) {
     transactions.push({
 
       transactionId: String(row[0] || ""),
-      date: row[2],
+      date: Utilities.formatDate(
+        transactionDate,
+        Session.getScriptTimeZone(),
+        "MM/dd/yyyy"
+      ),
+
       productName: String(row[8] || ""),
       quantity: quantity,
       revenue: quantity * price,
@@ -477,15 +483,51 @@ function getSalesReport(startDate, endDate) {
 
 }
 
-function testSalesReport() {
-
-  const report = getSalesReport(
-    "2026-01-01",
-    "2026-12-31"
-  );
+function showInventoryValuation() {
 
   SpreadsheetApp.getUi().alert(
-    JSON.stringify(report, null, 2)
+    "📦 Inventory Valuation Report\n\nComing in Beta 1.1"
   );
 
 }
+
+function showInventorySessionHistory() {
+
+  SpreadsheetApp.getUi().alert(
+    "📝 Inventory Session History\n\nComing in Beta 1.1"
+  );
+
+}
+
+function showInventoryAdjustmentReport() {
+
+  SpreadsheetApp.getUi().alert(
+    "🔄 Inventory Adjustment Report\n\nComing in Beta 1.1"
+  );
+
+}
+
+function showProfitReport() {
+
+  SpreadsheetApp.getUi().alert(
+    "📈 Profit Report\n\nComing in Beta 1.1"
+  );
+
+}
+
+function showPromotionalHistoryReport() {
+
+  SpreadsheetApp.getUi().alert(
+    "🎁 Promotional History Report\n\nComing in Beta 1.1"
+  );
+
+}
+
+function showReportsDashboard() {
+
+  SpreadsheetApp.getUi().alert(
+    "📊 Reports Dashboard\n\nComing in Beta 1.1"
+  );
+
+}
+

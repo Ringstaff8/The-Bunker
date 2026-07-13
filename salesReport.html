@@ -173,15 +173,66 @@
 
 <script>
 
-function loadReport(){
+function loadReport() {
 
-    // Placeholder for next milestone
+  const startDate = document.getElementById("startDate").value;
+  const endDate = document.getElementById("endDate").value;
+
+  if (!startDate || !endDate) {
+    alert("Please select a start date and end date.");
+    return;
+  }
+
+  google.script.run
+    .withSuccessHandler(displaySalesReport)
+    .withFailureHandler(showError)
+    .getSalesReport(startDate, endDate);
 
 }
 
+function displaySalesReport(report) {
+
+  document.getElementById("totalRevenue").textContent =
+    "$" + Number(report.totalRevenue || 0).toFixed(2);
+
+  document.getElementById("totalProfit").textContent =
+    "$" + Number(report.totalProfit || 0).toFixed(2);
+
+  document.getElementById("transactionCount").textContent =
+    Number(report.totalTransactions || 0);
+
+  document.getElementById("unitsSold").textContent =
+    Number(report.totalUnits || 0);
+
+  document.getElementById("averageSale").textContent =
+    "$" + Number(report.averageSale || 0).toFixed(2);
+
+  const tbody = document.querySelector("#salesTable tbody");
+  tbody.innerHTML = "";
+
+  report.transactions.forEach(function(transaction) {
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${transaction.date}</td>
+      <td>${transaction.productName}</td>
+      <td class="number">${Number(transaction.quantity || 0)}</td>
+      <td class="number">$${Number(transaction.revenue || 0).toFixed(2)}</td>
+      <td class="number">$${Number(transaction.profit || 0).toFixed(2)}</td>
+      <td>${transaction.paymentType}</td>
+    `;
+
+    tbody.appendChild(row);
+
+  });
+
+}
+
+function showError(error) {
+
+  alert("Apps Script Error:\n\n" + error.message);
+
+}
 
 </script>
-
-</body>
-
-</html>

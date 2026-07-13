@@ -21,26 +21,38 @@ function createBunkerMenu() {
 
     // Inventory
     .addSubMenu(
-  ui.createMenu("📦 Inventory")
-    .addItem("📋 Products", "showProducts")
-    .addItem("📥 Receive Inventory", "showReceiving")
-    .addItem("📋 Physical Inventory Count", "showInventoryCount")
-    .addItem("🔄 Inventory Adjustment", "showInventoryAdjustment")
-)
-
+      ui.createMenu("📦 Inventory")
+        .addItem("📋 Products", "showProducts")
+        .addItem("📥 Receive Inventory", "showReceiving")
+        .addItem("📋 Physical Inventory Count", "showInventoryCount")
+        .addItem("🔄 Inventory Adjustment", "showInventoryAdjustment")
+    )
 
     .addSeparator()
 
-       // Reports
+    // Reports
     .addSubMenu(
       ui.createMenu("📊 Reports")
+
+        // Current Reports
+        .addItem("💰 Sales Report", "showSalesReport")
         .addItem("📉 Low Stock Report", "showLowStockReport")
         .addItem("📋 Inventory Variance Report", "showInventoryVarianceReport")
-        // Future Reports
-     .addItem("📜 Transaction History", "showTransactionHistoryReport")
-        //.addItem("💰 Sales Report", "showSalesReport")
-//.addItem("📦 Inventory Valuation", "showInventoryValuation")
-//.addItem("📝 Inventory Session History", "showInventorySessionHistory")
+        .addItem("📜 Transaction History", "showTransactionHistoryReport")
+
+        .addSeparator()
+
+        // Planned Reports
+        .addItem("📦 Inventory Valuation", "showInventoryValuation")
+        .addItem("📝 Inventory Session History", "showInventorySessionHistory")
+        .addItem("🔄 Inventory Adjustment Report", "showInventoryAdjustmentReport")
+        .addItem("📈 Profit Report", "showProfitReport")
+        .addItem("🎁 Promotional History", "showPromotionalHistoryReport")
+
+        .addSeparator()
+
+        // Dashboard
+        .addItem("📊 Reports Dashboard", "showReportsDashboard")
     )
 
     .addItem("⚙️ Settings", "showSettings")
