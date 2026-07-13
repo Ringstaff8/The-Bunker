@@ -153,6 +153,155 @@ function getTopSellingProducts(limit) {
  */
 function getLowStockReport() {
 
-  return getLowStockProducts();
+  const products = getProducts();
 
+  return products
+    .filter(function(product) {
+
+      const onHand = Number(product[PRODUCT_COLUMNS.ONHAND]) || 0;
+      const reorderLevel = Number(product[PRODUCT_COLUMNS.REORDER]) || 0;
+      const active = product[PRODUCT_COLUMNS.ACTIVE];
+
+      return active && onHand <= reorderLevel;
+
+    })
+    .map(function(product) {
+
+      const onHand = Number(product[PRODUCT_COLUMNS.ONHAND]) || 0;
+      const reorderLevel = Number(product[PRODUCT_COLUMNS.REORDER]) || 0;
+
+      return {
+        sku: product[PRODUCT_COLUMNS.SKU],
+        category: product[PRODUCT_COLUMNS.CATEGORY],
+        design: product[PRODUCT_COLUMNS.DESIGN],
+        collection: product[PRODUCT_COLUMNS.COLLECTION],
+        productName: product[PRODUCT_COLUMNS.NAME],
+        size: product[PRODUCT_COLUMNS.SIZE],
+        onHand: onHand,
+        reorderLevel: reorderLevel,
+        difference: reorderLevel - onHand
+      };
+
+    })
+    .sort(function(a, b) {
+
+      return b.difference - a.difference;
+
+    });
+
+}
+
+function getInventoryVariance() {
+
+  const session = getLastCompletedInventorySession();
+
+  if (!session) {
+    throw new Error("No completed inventory session found.");
+  }
+
+  const detailSheet = getInventoryCountDetailsSheet();
+  const detailData = detailSheet.getDataRange().getValues();
+
+  const productData = getProductsSheet().getDataRange().getValues();
+
+  const results = [];
+
+  for (let i = 1; i < detailData.length; i++) {
+
+    if (
+      detailData[i][INVENTORY_DETAIL_COLUMNS.SESSION_ID] !== session.sessionId
+    ) {
+      continue;
+    }
+
+    const productId =
+      detailData[i][INVENTORY_DETAIL_COLUMNS.PRODUCT_ID];
+
+    let product = null;
+
+    for (let p = 1; p < productData.length; p++) {
+
+      if (
+        productData[p][PRODUCT_COLUMNS.ID] === productId
+      ) {
+        product = productData[p];
+        break;
+      }
+
+    }
+
+    if (!product) {
+      continue;
+    }
+
+    results.push({
+productId: product[PRODUCT_COLUMNS.ID],
+      category: product[PRODUCT_COLUMNS.CATEGORY],
+      sku: product[PRODUCT_COLUMNS.SKU],
+      design: product[PRODUCT_COLUMNS.DESIGN],
+      collection: product[PRODUCT_COLUMNS.COLLECTION],
+      name: product[PRODUCT_COLUMNS.NAME],
+      size: product[PRODUCT_COLUMNS.SIZE],
+
+      systemQty: Number(
+        detailData[i][INVENTORY_DETAIL_COLUMNS.SYSTEM_QTY]
+      ),
+
+      countedQty: Number(
+        detailData[i][INVENTORY_DETAIL_COLUMNS.COUNTED_QTY]
+      ),
+
+      difference: Number(
+        detailData[i][INVENTORY_DETAIL_COLUMNS.DIFFERENCE]
+      )
+
+    });
+
+  }
+
+  return results;
+
+}
+
+function testGetInventoryVariance() {
+
+  Logger.log(
+    JSON.stringify(getInventoryVariance(), null, 2)
+  );
+
+}
+
+function showInventoryVarianceReport() {
+
+  const template =
+    HtmlService.createTemplateFromFile("inventoryVariance");
+
+  const html = template
+    .evaluate()
+    .setWidth(900)
+    .setHeight(650);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "Inventory Variance Report"
+  );
+
+}
+
+function showLowStockReport() {
+
+  const html = HtmlService
+    .createHtmlOutputFromFile("lowStockReport")
+    .setWidth(1100)
+    .setHeight(650);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "Low Stock Report"
+  );
+
+}
+
+function testLowStockReport() {
+  Logger.log(getLowStockReport());
 }

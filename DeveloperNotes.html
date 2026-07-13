@@ -12,15 +12,16 @@ Project Status
 Core inventory system is operational.
 
 Completed
----------
 ✓ Dashboard
-✓ POS Sales
-✓ Inventory Sessions
-✓ Physical Inventory Count
-✓ Save Inventory Count
+✓ Point of Sale
 ✓ Promotional Items
-✓ Inventory Count Details
-✓ Session Progress Tracking
+✓ Product Management
+✓ Physical Inventory Count
+✓ Inventory Sessions
+✓ Resume Inventory Count
+✓ Apply Inventory Count
+✓ Inventory Adjustment Transactions
+
 
 Current Development
 -------------------
@@ -56,18 +57,104 @@ Resume Inventory Count
 
 Next Features
 -------------
-☐ Resume Inventory Count
-☐ Apply Inventory Count
-☐ Close Inventory Session
+□ Inventory Reports
+□ Manual Inventory Adjustments
+□ Reporting Dashboard Enhancements
 ☐ Inventory Adjustments
 ☐ Receiving Inventory
 ☐ Reports
 ☐ Settings
 
-Development Rules
------------------
-✓ One change = one test
-✓ HTML: replace entire file
-✓ Apps Script: replace entire function
-✓ Reuse helper functions
-✓ Git commit after completed features
+
+
+=====================================================
+Build 008 - Physical Inventory Workflow
+=====================================================
+
+Status:
+Completed
+
+Major Features Added:
+• Physical Inventory Sessions
+• Resume Inventory Count
+• Category Progress Tracking
+• Apply Inventory Count
+• Inventory Adjustment Transactions
+• Session Completion
+• Inventory Audit Trail
+
+Architecture Changes:
+
+Inventory Sessions
+• Inventory counts are organized into sessions.
+• Only one OPEN session can exist at a time.
+• New sessions are created automatically when needed.
+• Session ID is managed entirely by the server.
+• Browser no longer stores or passes Session IDs.
+
+Inventory Count Details
+• Every saved category stores:
+  - Session ID
+  - Category
+  - Product ID
+  - SKU
+  - System Quantity
+  - Counted Quantity
+  - Difference
+  - Saved Timestamp
+
+Resume Inventory
+• Selecting a category automatically restores previously saved counts.
+• If no saved counts exist, current system quantities are loaded.
+• Resume functionality is completely transparent to the user.
+
+Apply Inventory
+• Reads saved Inventory Count Details.
+• Updates Product On Hand quantities.
+• Creates Inventory Adjustment transactions only when quantity changes.
+• Records positive and negative quantity adjustments.
+• Preserves original System Quantity for audit purposes.
+
+Inventory Adjustment Transactions
+Transaction Type:
+Inventory Adjustment
+
+Recorded Fields:
+• Product ID
+• SKU
+• Category
+• Design
+• Collection
+• Product Name
+• Size
+• Quantity Difference (+/-)
+• Cost
+• User
+• Date
+• Time
+• Notes
+
+Session Completion
+When Apply Inventory completes:
+• Status → COMPLETED
+• Completed Date populated
+• Last Updated refreshed
+
+Design Decisions
+
+Resume Logic
+• Server determines active inventory session.
+• Browser never tracks Session IDs.
+
+Audit History
+• Inventory Count Details remain unchanged after Apply.
+• Products reflect new inventory.
+• Historical counts remain available for auditing.
+
+Future Enhancements (Beta 0.9)
+• Disable Apply button until all categories are counted.
+• Inventory Count Summary screen.
+• Variance Report.
+• Inventory Adjustment Report.
+• Manual Inventory Adjustments using shared transaction helper.
+• Close Session confirmation dialog.

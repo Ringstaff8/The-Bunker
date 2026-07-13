@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <base target="_top">
+
+  <?!= HtmlService.createHtmlOutputFromFile('styles').getContent(); ?>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>📊 Inventory Variance Report</h2>
+    <label>
+    <input
+        type="checkbox"
+        id="showDifferencesOnly"
+        checked
+        onchange="renderTable()">
+    Show Differences Only
+</label>
+
+<br><br>
+
+    <table id="varianceTable"
+           border="1"
+           width="100%"
+           cellspacing="0"
+           cellpadding="6">
+
+        <thead>
+
+            <tr>
+
+                <th>Collection</th>
+                <th>Product</th>
+                <th>Size</th>
+                <th>System</th>
+                <th>Counted</th>
+                <th>Difference</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        </tbody>
+
+    </table>
+
+    <br>
+
+    <button onclick="google.script.host.close()">
+        Close
+    </button>
+
+</div>
+
+<script>
+
+google.script.run
+    let varianceData = [];
+
+google.script.run
+    .withSuccessHandler(function(data) {
+
+        varianceData = data;
+
+        renderTable();
+
+    })
+    .getInventoryVariance();
+
+function renderTable() {
+
+    const tbody =
+        document.querySelector("#varianceTable tbody");
+
+    tbody.innerHTML = "";
+
+    const showDifferencesOnly =
+    document.getElementById("showDifferencesOnly").checked;
+
+varianceData.forEach(function(item) {
+
+    if (
+        showDifferencesOnly &&
+        item.difference === 0
+    ) {
+        return;
+    }
+
+        const row = document.createElement("tr");
+
+        row.innerHTML =
+
+            "<td>" + item.collection + "</td>" +
+
+            "<td>" + item.name + "</td>" +
+
+            "<td>" + item.size + "</td>" +
+
+            "<td style='text-align:center'>" +
+                item.systemQty +
+            "</td>" +
+
+            "<td style='text-align:center'>" +
+                item.countedQty +
+            "</td>" +
+
+            "<td style='text-align:center'>" +
+                item.difference +
+            "</td>";
+
+        if (item.difference > 0) {
+
+            row.style.backgroundColor = "#d4edda";
+
+        }
+        else if (item.difference < 0) {
+
+            row.style.backgroundColor = "#f8d7da";
+
+        }
+
+        tbody.appendChild(row);
+
+    });
+
+}
+
+function showInventoryVarianceReport() {
+
+  const html = HtmlService
+    .createHtmlOutputFromFile("inventoryVariance")
+    .setWidth(900)
+    .setHeight(650);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "Inventory Variance Report"
+  );
+
+}
+
+</script>
+
+</body>
+
+</html>

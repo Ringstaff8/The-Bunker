@@ -376,3 +376,70 @@ function testApplyInventoryCount() {
   Logger.log(applyInventoryCount());
 }
 
+function getLastCompletedInventorySession() {
+
+  const sheet = getInventorySessionsSheet();
+  const data = sheet.getDataRange().getValues();
+
+  for (let i = data.length - 1; i >= 1; i--) {
+
+    if (
+      data[i][INVENTORY_SESSION_COLUMNS.STATUS] === "COMPLETED"
+    ) {
+
+      return {
+        sessionId: data[i][INVENTORY_SESSION_COLUMNS.SESSION_ID],
+        started: data[i][INVENTORY_SESSION_COLUMNS.STARTED],
+        completed: data[i][INVENTORY_SESSION_COLUMNS.COMPLETED]
+      };
+
+    }
+
+  }
+
+  return null;
+
+}
+function testLastCompletedInventorySession() {
+
+  Logger.log(
+    JSON.stringify(getLastCompletedInventorySession())
+  );
+
+}
+
+function getLastCompletedInventorySession() {
+
+  const sheet = getInventorySessionsSheet();
+  const data = sheet.getDataRange().getValues();
+
+  for (let i = data.length - 1; i >= 1; i--) {
+
+    if (
+      data[i][INVENTORY_SESSION_COLUMNS.STATUS] === "COMPLETED"
+    ) {
+
+      return {
+        sessionId: data[i][INVENTORY_SESSION_COLUMNS.SESSION_ID],
+        started: data[i][INVENTORY_SESSION_COLUMNS.STARTED],
+        startedBy: data[i][INVENTORY_SESSION_COLUMNS.STARTED_BY],
+        progress: data[i][INVENTORY_SESSION_COLUMNS.PROGRESS],
+        status: data[i][INVENTORY_SESSION_COLUMNS.STATUS],
+        updated: data[i][INVENTORY_SESSION_COLUMNS.LAST_UPDATED],
+        completed: data[i][INVENTORY_SESSION_COLUMNS.COMPLETED]
+      };
+
+    }
+
+  }
+
+  return null;
+
+}
+function testGetLastCompletedInventorySession() {
+
+  const session = getLastCompletedInventorySession();
+
+  Logger.log(JSON.stringify(session));
+
+}

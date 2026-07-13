@@ -28,10 +28,21 @@ function createBunkerMenu() {
     .addItem("🔄 Inventory Adjustment", "showInventoryAdjustment")
 )
 
+
     .addSeparator()
 
-    // Analytics
-    .addItem("📊 Reports", "showReports")
+       // Reports
+    .addSubMenu(
+      ui.createMenu("📊 Reports")
+        .addItem("📉 Low Stock Report", "showLowStockReport")
+        .addItem("📋 Inventory Variance Report", "showInventoryVarianceReport")
+        // Future Reports
+        //.addItem("📜 Transaction History", "showTransactionHistory")
+        //.addItem("💰 Sales Report", "showSalesReport")
+        //.addItem("📦 Inventory Valuation", "showInventoryValuation")
+        //.addItem("📝 Inventory Session History", "showInventorySessionHistory")
+    )
+
     .addItem("⚙️ Settings", "showSettings")
 
     .addSeparator()
