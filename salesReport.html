@@ -231,7 +231,10 @@ function displaySalesReport(report) {
 
 function showError(error) {
 
-  alert("Apps Script Error:\n\n" + error.message);
+  alert(
+    "The Sales Report could not be generated.\n\n" +
+    error.message
+  );
 
 }
 

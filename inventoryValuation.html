@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+
+  <style>
+
+    body{
+      font-family:Arial,sans-serif;
+      margin:20px;
+    }
+
+    h2{
+      margin-top:0;
+    }
+
+    .summaryBar{
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+      margin-bottom:20px;
+    }
+
+    .card{
+      flex:1;
+      min-width:160px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      padding:12px;
+      text-align:center;
+      background:#f8f9fa;
+    }
+
+    .card h3{
+      margin:0;
+      color:#1a73e8;
+      font-size:28px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    th{
+      background:#1a73e8;
+      color:white;
+      padding:8px;
+      position:sticky;
+      top:0;
+    }
+
+    td{
+      padding:6px;
+      border-bottom:1px solid #ddd;
+      text-align:left;
+    }
+
+    td.number{
+      text-align:right;
+    }
+
+    .buttons{
+      margin-top:20px;
+      text-align:right;
+    }
+
+    button{
+      padding:8px 18px;
+      margin-left:10px;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<h2>Inventory Valuation Report</h2>
+
+<div class="summaryBar" id="summaryBar"></div>
+
+<table>
+
+<thead>
+
+<tr>
+<th>SKU</th>
+<th>Product</th>
+<th>Size</th>
+<th>Qty</th>
+<th>Cost</th>
+<th>Retail</th>
+<th>Inventory Cost</th>
+<th>Inventory Retail</th>
+<th>Profit</th>
+</tr>
+
+</thead>
+
+<tbody id="reportBody"></tbody>
+
+</table>
+
+<div class="buttons">
+
+<button onclick="window.print()">
+Print
+</button>
+
+<button onclick="google.script.host.close()">
+Close
+</button>
+
+</div>
+
+<script>
+
+function money(v){
+  return "$"+Number(v).toLocaleString(undefined,{
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
+}
+
+function loadReport(){
+
+  google.script.run
+    .withSuccessHandler(renderReport)
+    .getInventoryValuationReport();
+
+}
+
+function renderReport(report){
+
+  const s=report.summary;
+
+  document.getElementById("summaryBar").innerHTML=`
+
+    <div class="card">
+      <div>Products</div>
+      <h3>${s.totalProducts}</h3>
+    </div>
+
+    <div class="card">
+      <div>Units</div>
+      <h3>${s.totalUnits}</h3>
+    </div>
+
+    <div class="card">
+      <div>Inventory Cost</div>
+      <h3>${money(s.totalCost)}</h3>
+    </div>
+
+    <div class="card">
+      <div>Retail Value</div>
+      <h3>${money(s.totalRetail)}</h3>
+    </div>
+
+    <div class="card">
+      <div>Potential Profit</div>
+      <h3>${money(s.expectedProfit)}</h3>
+    </div>
+
+  `;
+
+  const body=document.getElementById("reportBody");
+
+  body.innerHTML="";
+
+  report.products.forEach(item=>{
+
+    body.innerHTML+=`
+
+      <tr>
+
+        <td>${item.sku}</td>
+
+        <td>${item.collection} ${item.product}</td>
+
+        <td>${item.size}</td>
+
+        <td class="number">${item.qty}</td>
+
+        <td class="number">${money(item.cost)}</td>
+
+        <td class="number">${money(item.price)}</td>
+
+        <td class="number">${money(item.inventoryCost)}</td>
+
+        <td class="number">${money(item.inventoryRetail)}</td>
+
+        <td class="number">${money(item.expectedProfit)}</td>
+
+      </tr>
+
+    `;
+
+  });
+
+}
+
+loadReport();
+
+</script>
+
+</body>
+</html>

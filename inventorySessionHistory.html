@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .summaryBar {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      flex: 1;
+      min-width: 170px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      background: #f8f9fa;
+    }
+
+    .card h3 {
+      margin: 6px 0 0;
+      font-size: 26px;
+      color: #1a73e8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #1a73e8;
+      color: white;
+      padding: 8px;
+      text-align: left;
+    }
+
+    td {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    tr:hover {
+      background: #eef5ff;
+    }
+
+    .buttons {
+      margin-top: 20px;
+      text-align: right;
+    }
+
+    button {
+      padding: 8px 16px;
+      margin-left: 10px;
+    }
+
+    .completed {
+      color: green;
+      font-weight: bold;
+    }
+
+    .open {
+      color: #d48b00;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Inventory Session History Report</h2>
+
+  <div id="summaryBar" class="summaryBar"></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Session ID</th>
+        <th>Started</th>
+        <th>Started By</th>
+        <th>Progress</th>
+        <th>Status</th>
+        <th>Last Updated</th>
+        <th>Completed</th>
+      </tr>
+    </thead>
+
+    <tbody id="reportBody"></tbody>
+  </table>
+
+  <div class="buttons">
+    <button onclick="window.print()">Print</button>
+    <button onclick="google.script.host.close()">Close</button>
+  </div>
+
+  <script>
+
+    function formatDate(value) {
+      if (!value) return "";
+      return new Date(value).toLocaleString();
+    }
+
+    function loadReport() {
+
+      google.script.run
+        .withSuccessHandler(renderReport)
+        .withFailureHandler(function (err) {
+          alert(err.message);
+        })
+        .getInventorySessionHistoryReport();
+
+    }
+
+    function renderReport(report) {
+
+      const s = report.summary;
+
+      document.getElementById("summaryBar").innerHTML = `
+        <div class="card">
+          <div>Total Sessions</div>
+          <h3>${s.totalSessions}</h3>
+        </div>
+
+        <div class="card">
+          <div>Open Sessions</div>
+          <h3>${s.openSessions}</h3>
+        </div>
+
+        <div class="card">
+          <div>Completed Sessions</div>
+          <h3>${s.completedSessions}</h3>
+        </div>
+
+        <div class="card">
+          <div>Last Inventory</div>
+          <h3 style="font-size:16px;">
+            ${formatDate(s.lastInventory)}
+          </h3>
+        </div>
+      `;
+
+      const body = document.getElementById("reportBody");
+      body.innerHTML = "";
+
+      report.sessions.forEach(session => {
+
+        const statusClass =
+          String(session.status).toUpperCase() === "COMPLETED"
+            ? "completed"
+            : "open";
+
+        body.innerHTML += `
+          <tr>
+            <td>${session.sessionId}</td>
+            <td>${formatDate(session.started)}</td>
+            <td>${session.startedBy}</td>
+            <td>${session.progress}</td>
+            <td class="${statusClass}">${session.status}</td>
+            <td>${formatDate(session.lastUpdated)}</td>
+            <td>${formatDate(session.completed)}</td>
+          </tr>
+        `;
+
+      });
+
+    }
+
+    loadReport();
+
+  </script>
+
+</body>
+
+</html>

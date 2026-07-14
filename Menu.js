@@ -30,34 +30,34 @@ function createBunkerMenu() {
 
     .addSeparator()
 
-    // Reports
-    .addSubMenu(
-      ui.createMenu("📊 Reports")
+  // Reports
+.addSubMenu(
+  ui.createMenu("📊 Reports")
 
-        // Current Reports
-        .addItem("💰 Sales Report", "showSalesReport")
-        .addItem("📉 Low Stock Report", "showLowStockReport")
-        .addItem("📋 Inventory Variance Report", "showInventoryVarianceReport")
-        .addItem("📜 Transaction History", "showTransactionHistoryReport")
-
-        .addSeparator()
-
-        // Planned Reports
-        .addItem("📦 Inventory Valuation", "showInventoryValuation")
-        .addItem("📝 Inventory Session History", "showInventorySessionHistory")
-        .addItem("🔄 Inventory Adjustment Report", "showInventoryAdjustmentReport")
-        .addItem("📈 Profit Report", "showProfitReport")
-        .addItem("🎁 Promotional History", "showPromotionalHistoryReport")
-
-        .addSeparator()
-
-        // Dashboard
-        .addItem("📊 Reports Dashboard", "showReportsDashboard")
-    )
-
-    .addItem("⚙️ Settings", "showSettings")
+    // Current Reports
+    .addItem("💰 Sales Report", "showSalesReport")
+    .addItem("📉 Low Stock Report", "showLowStockReport")
+    .addItem("📋 Inventory Variance Report", "showInventoryVarianceReport")
+    .addItem("📜 Transaction History Report", "showTransactionHistoryReport")
 
     .addSeparator()
+
+    // Inventory Reports
+    .addItem("💲 Inventory Valuation Report", "showInventoryValuationReport")
+    .addItem("📋 Inventory Session History Report", "showInventorySessionHistoryReport")
+    .addItem("🔄 Inventory Adjustment Report", "showInventoryAdjustmentReport")
+
+    .addSeparator()
+
+    // Financial Reports
+    .addItem("📈 Profit Report", "showProfitReport")
+    .addItem("🎁 Promotional History Report", "showPromotionalHistoryReport")
+
+    .addSeparator()
+
+    // Dashboard
+    .addItem("📊 Reports Dashboard", "showReportsDashboard")
+)
 
     // Development Tools
     .addSubMenu(

@@ -483,21 +483,6 @@ function getSalesReport(startDate, endDate) {
 
 }
 
-function showInventoryValuation() {
-
-  SpreadsheetApp.getUi().alert(
-    "📦 Inventory Valuation Report\n\nComing in Beta 1.1"
-  );
-
-}
-
-function showInventorySessionHistory() {
-
-  SpreadsheetApp.getUi().alert(
-    "📝 Inventory Session History\n\nComing in Beta 1.1"
-  );
-
-}
 
 function showInventoryAdjustmentReport() {
 
@@ -528,6 +513,172 @@ function showReportsDashboard() {
   SpreadsheetApp.getUi().alert(
     "📊 Reports Dashboard\n\nComing in Beta 1.1"
   );
+
+}
+
+function showInventoryValuationReport() {
+
+  const html = HtmlService
+    .createHtmlOutputFromFile("inventoryValuation")
+    .setWidth(1100)
+    .setHeight(700);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "Inventory Valuation Report"
+  );
+
+}
+
+function getInventoryValuationReport() {
+  const products = getProducts();
+
+  const activeProducts = products.filter(product => product[PRODUCT_COLUMNS.ACTIVE]);
+
+  activeProducts.sort((a, b) => {
+
+    const category = String(a[PRODUCT_COLUMNS.CATEGORY]).localeCompare(
+      String(b[PRODUCT_COLUMNS.CATEGORY])
+    );
+    if (category !== 0) return category;
+
+    const collection = String(a[PRODUCT_COLUMNS.COLLECTION]).localeCompare(
+      String(b[PRODUCT_COLUMNS.COLLECTION])
+    );
+    if (collection !== 0) return collection;
+
+    const name = String(a[PRODUCT_COLUMNS.NAME]).localeCompare(
+      String(b[PRODUCT_COLUMNS.NAME])
+    );
+    if (name !== 0) return name;
+
+    return String(a[PRODUCT_COLUMNS.SIZE]).localeCompare(
+      String(b[PRODUCT_COLUMNS.SIZE])
+    );
+  });
+
+  let totalUnits = 0;
+  let totalCost = 0;
+  let totalRetail = 0;
+
+  const reportRows = activeProducts.map(product => {
+
+    const qty = Number(product[PRODUCT_COLUMNS.ONHAND]) || 0;
+    const cost = Number(product[PRODUCT_COLUMNS.COST]) || 0;
+    const price = Number(product[PRODUCT_COLUMNS.PRICE]) || 0;
+
+    const inventoryCost = qty * cost;
+    const inventoryRetail = qty * price;
+    const expectedProfit = inventoryRetail - inventoryCost;
+
+    totalUnits += qty;
+    totalCost += inventoryCost;
+    totalRetail += inventoryRetail;
+
+    return {
+      sku: product[PRODUCT_COLUMNS.SKU],
+      category: product[PRODUCT_COLUMNS.CATEGORY],
+      collection: product[PRODUCT_COLUMNS.COLLECTION],
+      product: product[PRODUCT_COLUMNS.NAME],
+      size: product[PRODUCT_COLUMNS.SIZE],
+      qty,
+      cost,
+      price,
+      inventoryCost,
+      inventoryRetail,
+      expectedProfit
+    };
+  });
+
+  return {
+    summary: {
+      totalProducts: reportRows.length,
+      totalUnits,
+      totalCost,
+      totalRetail,
+      expectedProfit: totalRetail - totalCost
+    },
+    products: reportRows
+  };
+}
+
+function showInventorySessionHistoryReport() {
+
+  const html = HtmlService
+    .createHtmlOutputFromFile("inventorySessionHistory")
+    .setWidth(1100)
+    .setHeight(700);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "Inventory Session History Report"
+  );
+
+}
+
+function getInventorySessionHistoryReport() {
+
+  const sheet = getInventorySessionsSheet();
+
+  const data = sheet.getDataRange().getValues();
+
+  data.shift(); // Remove header row
+
+  const sessions = data
+  .filter(row => row[INVENTORY_SESSION_COLUMNS.SESSION_ID])
+  .map(row => ({
+
+  sessionId: String(row[INVENTORY_SESSION_COLUMNS.SESSION_ID] || ""),
+
+  started: row[INVENTORY_SESSION_COLUMNS.STARTED]
+    ? new Date(row[INVENTORY_SESSION_COLUMNS.STARTED]).toISOString()
+    : "",
+
+  startedBy: String(row[INVENTORY_SESSION_COLUMNS.STARTED_BY] || ""),
+
+
+  status: String(row[INVENTORY_SESSION_COLUMNS.STATUS] || ""),
+
+  lastUpdated: row[INVENTORY_SESSION_COLUMNS.LAST_UPDATED]
+    ? new Date(row[INVENTORY_SESSION_COLUMNS.LAST_UPDATED]).toISOString()
+    : "",
+
+  completed: row[INVENTORY_SESSION_COLUMNS.COMPLETED]
+    ? new Date(row[INVENTORY_SESSION_COLUMNS.COMPLETED]).toISOString()
+    : ""
+
+}));
+  // Newest session first
+  sessions.sort((a, b) => new Date(b.started) - new Date(a.started));
+
+  const totalSessions = sessions.length;
+
+  const openSessions = sessions.filter(
+    s => String(s.status).toUpperCase() !== "COMPLETED"
+  ).length;
+
+  const completedSessions = sessions.filter(
+    s => String(s.status).toUpperCase() === "COMPLETED"
+  ).length;
+
+  return {
+
+    summary: {
+
+      totalSessions,
+
+      openSessions,
+
+      completedSessions,
+
+      lastInventory:
+        sessions.length > 0 ? sessions[0].started : ""
+
+    },
+
+    sessions
+
+  };
 
 }
 

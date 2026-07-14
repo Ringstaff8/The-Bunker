@@ -372,41 +372,7 @@ function applyInventoryCount() {
 
 }
 
-function testApplyInventoryCount() {
-  Logger.log(applyInventoryCount());
-}
 
-function getLastCompletedInventorySession() {
-
-  const sheet = getInventorySessionsSheet();
-  const data = sheet.getDataRange().getValues();
-
-  for (let i = data.length - 1; i >= 1; i--) {
-
-    if (
-      data[i][INVENTORY_SESSION_COLUMNS.STATUS] === "COMPLETED"
-    ) {
-
-      return {
-        sessionId: data[i][INVENTORY_SESSION_COLUMNS.SESSION_ID],
-        started: data[i][INVENTORY_SESSION_COLUMNS.STARTED],
-        completed: data[i][INVENTORY_SESSION_COLUMNS.COMPLETED]
-      };
-
-    }
-
-  }
-
-  return null;
-
-}
-function testLastCompletedInventorySession() {
-
-  Logger.log(
-    JSON.stringify(getLastCompletedInventorySession())
-  );
-
-}
 
 function getLastCompletedInventorySession() {
 
@@ -441,5 +407,19 @@ function testGetLastCompletedInventorySession() {
   const session = getLastCompletedInventorySession();
 
   Logger.log(JSON.stringify(session));
+
+}
+
+function showInventorySessionHistoryReport() {
+
+  const html = HtmlService
+    .createHtmlOutputFromFile("inventorySessionHistory")
+    .setWidth(1100)
+    .setHeight(700);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "Inventory Session History Report"
+  );
 
 }
