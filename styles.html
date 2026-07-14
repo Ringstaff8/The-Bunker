@@ -485,5 +485,69 @@ select{
 }
 
 }
+/* ==========================================================
+   REPORT FRAMEWORK
+   ========================================================== */
 
+.report-title{
+    margin:0 0 20px;
+    color:var(--primary);
+    font-size:28px;
+    font-weight:bold;
+}
+
+.summaryBar{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.summaryBar .card{
+    flex:1;
+    min-width:170px;
+    text-align:center;
+}
+
+.summaryBar .card h3{
+    margin:6px 0 0;
+    font-size:28px;
+    color:var(--primary);
+}
+
+.report-buttons{
+    margin-top:20px;
+    text-align:right;
+}
+
+.completed{
+    color:var(--success);
+    font-weight:bold;
+}
+
+.open{
+    color:var(--warning);
+    font-weight:bold;
+}
+
+table tr:nth-child(even){
+    background:#f9f9f9;
+}
+
+table tr:hover{
+    background:#eef5ff;
+}
+
+@media print{
+
+    .report-buttons{
+        display:none;
+    }
+
+    body{
+        padding:0;
+        background:white;
+    }
+
+}
 </style>

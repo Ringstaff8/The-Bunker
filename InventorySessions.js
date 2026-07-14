@@ -409,17 +409,3 @@ function testGetLastCompletedInventorySession() {
   Logger.log(JSON.stringify(session));
 
 }
-
-function showInventorySessionHistoryReport() {
-
-  const html = HtmlService
-    .createHtmlOutputFromFile("inventorySessionHistory")
-    .setWidth(1100)
-    .setHeight(700);
-
-  SpreadsheetApp.getUi().showModalDialog(
-    html,
-    "Inventory Session History Report"
-  );
-
-}

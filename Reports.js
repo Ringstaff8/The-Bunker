@@ -375,15 +375,11 @@ function testTransactionHistory() {
 
 function showSalesReport() {
 
-  const html = HtmlService
-    .createTemplateFromFile("salesReport")
-    .evaluate()
-    .setWidth(1100)
-    .setHeight(700);
-
-  SpreadsheetApp.getUi().showModalDialog(
-    html,
-    "Sales Report"
+  showDialog(
+    "salesReport",
+    "Sales Report",
+    1100,
+    700
   );
 
 }
@@ -682,3 +678,16 @@ function getInventorySessionHistoryReport() {
 
 }
 
+function showInventoryAdjustmentReport() {
+
+  const html = HtmlService
+   .createHtmlOutputFromFile("inventoryAdjustmentEntry")
+    .setWidth(1100)
+    .setHeight(700);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "Inventory Adjustment Report"
+  );
+
+}

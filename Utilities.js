@@ -158,3 +158,36 @@ function include(filename) {
     .getContent();
 
 }
+
+/**
+ * Opens any HTML dialog using Apps Script templates.
+ *
+ * @param {string} fileName HTML filename (without .html)
+ * @param {string} title Dialog title
+ * @param {number} width Dialog width
+ * @param {number} height Dialog height
+ */
+function showDialog(fileName, title, width, height) {
+
+  const html = HtmlService
+    .createTemplateFromFile(fileName)
+    .evaluate()
+    .setWidth(width)
+    .setHeight(height);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    title
+  );
+
+}
+function testShowDialog() {
+
+  showDialog(
+    "inventorySessionHistory",
+    "Inventory Session History Report",
+    1100,
+    700
+  );
+
+}
