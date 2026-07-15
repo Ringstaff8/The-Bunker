@@ -80,9 +80,7 @@ function createBunkerMenu() {
 
 function showPromotional() {
 
-  SpreadsheetApp.getUi().alert(
-    "🚧 Promotional Items\n\nComing in Beta 2."
-  );
+  SpreadsheetApp.getUi().alert("showPromotional() is running");
 
 }
 

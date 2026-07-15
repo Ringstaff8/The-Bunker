@@ -91,16 +91,20 @@ function submitPromo() {
 
     };
 
-    google.script.run
-       .withSuccessHandler(function () {
+  google.script.run
+    .withSuccessHandler(function () {
 
-    alert("Promotional giveaway completed successfully.");
+        alert("Promotional giveaway completed successfully.");
 
-    google.script.host.close();
+        google.script.host.close();
 
-})
+    })
+    .withFailureHandler(function(error){
 
-        .savePromotionInfo(promo);
+        alert("Error:\n\n" + error.message);
+
+    })
+    .savePromotionInfo(promo);
 
 }
 

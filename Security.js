@@ -38,7 +38,7 @@ function verifyPassword(password){
 function showPromotional() {
 
   showDialog(
-    "promotional",
+    "Promotional",
     "🎁 Promotional Items",
     900,
     700
