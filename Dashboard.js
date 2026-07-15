@@ -36,6 +36,7 @@ function getDashboardStats() {
   let inventoryValue = 0;
   let lowStock = 0;
   let todaysSales = 0;
+  let todaysProfit = 0;
 
   products.forEach(product => {
 
@@ -60,8 +61,10 @@ function getDashboardStats() {
 
       const quantity = Number(row[11]) || 0;
       const price = Number(row[13]) || 0;
+      const profit = Number(row[14]) || 0;
 
       todaysSales += quantity * price;
+      todaysProfit += profit;
 
     }
 
@@ -73,7 +76,7 @@ function getDashboardStats() {
     inventoryValue: inventoryValue,
     lowStock: lowStock,
     todaysSales: todaysSales,
-    todaysProfit: 0,
+    todaysProfit: todaysProfit,
     promotionalToday: 0
 
   };
