@@ -33,10 +33,11 @@ function getDashboardStats() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  let inventoryValue = 0;
-  let lowStock = 0;
-  let todaysSales = 0;
-  let todaysProfit = 0;
+let inventoryValue = 0;
+let lowStock = 0;
+let todaysSales = 0;
+let todaysProfit = 0;
+let promotionalToday = 0;
 
   products.forEach(product => {
 
@@ -51,34 +52,41 @@ function getDashboardStats() {
     }
 
   });
+transactions.forEach(row => {
 
-  transactions.forEach(row => {
+  const transactionDate = new Date(row[2]);
+  transactionDate.setHours(0, 0, 0, 0);
 
-    const transactionDate = new Date(row[2]);
-    transactionDate.setHours(0, 0, 0, 0);
+  if (transactionDate.getTime() !== today.getTime()) {
+    return;
+  }
 
-    if (transactionDate.getTime() === today.getTime()) {
+  const quantity = Number(row[11]) || 0;
+  const price = Number(row[13]) || 0;
+  const profit = Number(row[14]) || 0;
 
-      const quantity = Number(row[11]) || 0;
-      const price = Number(row[13]) || 0;
-      const profit = Number(row[14]) || 0;
+  const paymentType = String(row[15]).trim();
 
-      todaysSales += quantity * price;
-      todaysProfit += profit;
+  if (paymentType === "Promotional") {
 
-    }
+    promotionalToday += quantity;
 
-  });
+  } else {
+
+    todaysSales += quantity * price;
+    todaysProfit += profit;
+
+  }
+
+});
 
   return {
-
-    totalProducts: products.length,
-    inventoryValue: inventoryValue,
-    lowStock: lowStock,
-    todaysSales: todaysSales,
-    todaysProfit: todaysProfit,
-    promotionalToday: 0
-
-  };
+  totalProducts: products.length,
+  inventoryValue: inventoryValue,
+  lowStock: lowStock,
+  todaysSales: todaysSales,
+  todaysProfit: todaysProfit,
+  promotionalToday: promotionalToday
+};
 
 }
