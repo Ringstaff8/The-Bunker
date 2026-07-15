@@ -135,14 +135,11 @@ varianceData.forEach(function(item) {
 
 function showInventoryVarianceReport() {
 
-  const html = HtmlService
-    .createHtmlOutputFromFile("inventoryVariance")
-    .setWidth(900)
-    .setHeight(650);
-
-  SpreadsheetApp.getUi().showModalDialog(
-    html,
-    "Inventory Variance Report"
+  showDialog(
+    "inventoryVariance",
+    "Inventory Variance Report",
+    900,
+    650
   );
 
 }
