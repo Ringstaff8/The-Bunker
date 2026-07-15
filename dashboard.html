@@ -17,8 +17,8 @@
     <div class="logoArea">
 
         <img id="bunkerLogo"
-             src="https://placehold.co/110x110?text=Logo"
-             alt="The Bunker Logo">
+     src="https://placehold.co/110x110?text=Logo"
+     alt="The Bunker Logo">
 
     </div>
 
@@ -118,18 +118,37 @@
 
 <script>
 
-window.onload = function(){
+window.onload = function () {
+
+    // Dashboard loading state
+    document.querySelector(".statusMessage").textContent =
+        "Loading dashboard...";
+
+    document.getElementById("dashboardAlerts").innerHTML =
+        "<p>Loading alerts...</p>";
+
+    document.getElementById("recentActivity").innerHTML =
+        "<p>Loading recent activity...</p>";
 
     google.script.run
-    .withSuccessHandler(loadDashboard)
-    .withFailureHandler(function(error){
+        .withSuccessHandler(loadDashboard)
+        .withFailureHandler(function (error) {
 
-        alert("Dashboard Error:\n\n" + error.message);
+            document.querySelector(".statusMessage").textContent =
+                "Unable to load dashboard.";
 
-    })
-    .getDashboardStats();
+            document.getElementById("dashboardAlerts").innerHTML =
+                "<p>Dashboard data could not be loaded.</p>";
 
-}
+            document.getElementById("recentActivity").innerHTML =
+                "<p>No activity available.</p>";
+
+            console.error("Dashboard Error:", error);
+
+        })
+        .getDashboardStats();
+
+};
 
 function loadDashboard(stats){
 

@@ -12,12 +12,19 @@
  * Runs every time the spreadsheet opens.
  */
 /**
+/**
  * Application Constants
+ *
+ * Branding information is now maintained in Branding.gs.
+ * This object remains only for application-level settings.
  */
-const APP = {
-  NAME: "The Bunker",
-  VERSION: "Beta 1.0"
-}
+const APP = Object.freeze({
+
+  DEBUG: false
+
+});
+
+
 function onOpen(e) {
 
   createBunkerMenu();
