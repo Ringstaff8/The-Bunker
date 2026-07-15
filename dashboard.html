@@ -22,14 +22,15 @@
 
     </div>
 
-    <h1>THE BUNKER</h1>
+    <h1 id="dashboardTitle">THE BUNKER</h1>
 
-    <h3>Inventory & Point of Sale</h3>
+<h3 id="dashboardSubtitle">
+    Inventory & Point of Sale
+</h3>
 
-    <p class="statusMessage">
-        Ready for another great day!
-    </p>
-
+<p class="statusMessage" id="statusMessage">
+    Ready for another great day!
+</p>
 </div>
 
    
@@ -121,8 +122,8 @@
 window.onload = function () {
 
     // Dashboard loading state
-    document.querySelector(".statusMessage").textContent =
-        "Loading dashboard...";
+   document.getElementById("statusMessage").textContent =
+    "Loading dashboard...";
 
     document.getElementById("dashboardAlerts").innerHTML =
         "<p>Loading alerts...</p>";
@@ -134,8 +135,8 @@ window.onload = function () {
         .withSuccessHandler(loadDashboard)
         .withFailureHandler(function (error) {
 
-            document.querySelector(".statusMessage").textContent =
-                "Unable to load dashboard.";
+        document.getElementById("statusMessage").textContent =
+    "Unable to load dashboard.";
 
             document.getElementById("dashboardAlerts").innerHTML =
                 "<p>Dashboard data could not be loaded.</p>";
