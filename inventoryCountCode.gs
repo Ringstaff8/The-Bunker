@@ -1,14 +1,13 @@
+/**
+ * Opens the Inventory Count window.
+ */
 function showInventoryCount() {
 
-  const html = HtmlService
-    .createTemplateFromFile("inventoryCount")
-    .evaluate()
-    .setWidth(1200)
-    .setHeight(700);
-
-  SpreadsheetApp.getUi().showModalDialog(
-    html,
-    "📋 Inventory Count"
+  showDialog(
+    "inventoryCount",
+    "📋 Inventory Count",
+    1200,
+    700
   );
 
 }

@@ -35,17 +35,13 @@ function verifyPassword(password){
  * Password is verified by the HTML page before
  * inventory can be removed.
  */
-function showPromotional(){
+function showPromotional() {
 
-  const html = HtmlService
-    .createTemplateFromFile("promotional")
-    .evaluate()
-    .setWidth(900)
-    .setHeight(700);
-
-  SpreadsheetApp.getUi().showModalDialog(
-    html,
-    "🎁 Promotional Items"
+  showDialog(
+    "promotional",
+    "🎁 Promotional Items",
+    900,
+    700
   );
 
 }
