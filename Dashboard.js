@@ -76,14 +76,33 @@ transactions.forEach(row => {
   }
 
 });
+const alerts = [];
 
-  return {
+if (lowStockProducts.length > 0) {
+  alerts.push(`🔴 ${lowStockProducts.length} product(s) need reordered.`);
+}
+
+if (todaysSales === 0) {
+  alerts.push("🟡 No sales have been recorded today.");
+}
+
+if (promotionalToday > 0) {
+  alerts.push(`🔵 ${promotionalToday} promotional item(s) distributed today.`);
+}
+
+if (alerts.length === 0) {
+  alerts.push("🟢 System operating normally.");
+}
+
+
+ return {
   totalProducts: products.length,
   inventoryValue: inventoryValue,
   lowStock: lowStockProducts.length,
   todaysSales: todaysSales,
   todaysProfit: todaysProfit,
-  promotionalToday: promotionalToday
+  promotionalToday: promotionalToday,
+  alerts: alerts
 };
 
 }
