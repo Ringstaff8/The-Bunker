@@ -11,15 +11,12 @@
  */
 function showSales() {
 
-  const html = HtmlService
-    .createTemplateFromFile("sales")
-    .evaluate()
-    .setWidth(1400)
-    .setHeight(900);
-
-  SpreadsheetApp
-    .getUi()
-    .showModalDialog(html, "🛒 Ring Up Sale");
+  showDialog(
+    "sales",
+    "🛒 Ring Up Sale",
+    1400,
+    900
+  );
 
 }
 

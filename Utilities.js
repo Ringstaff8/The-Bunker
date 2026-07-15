@@ -181,13 +181,3 @@ function showDialog(fileName, title, width, height) {
   );
 
 }
-function testShowDialog() {
-
-  showDialog(
-    "inventorySessionHistory",
-    "Inventory Session History Report",
-    1100,
-    700
-  );
-
-}

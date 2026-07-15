@@ -11,15 +11,12 @@
  */
 function showDashboard() {
 
-  const html = HtmlService
-    .createTemplateFromFile("dashboard")
-    .evaluate()
-    .setWidth(1400)
-    .setHeight(900);
-
-  SpreadsheetApp
-    .getUi()
-    .showModalDialog(html, "🌪️ The Bunker Dashboard");
+  showDialog(
+    "dashboard",
+    "🌪️ The Bunker Dashboard",
+    1400,
+    900
+  );
 
 }
 
