@@ -24,34 +24,56 @@ function showDashboard() {
 /**
  * Dashboard Statistics
  */
+
 function getDashboardStats() {
 
-  const products = getActiveProducts();
+  const products = getProducts();
+  const transactions = getTransactions();
 
-  const lowStock = getLowStockProducts();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   let inventoryValue = 0;
-
-  let totalProducts = products.length;
+  let lowStock = 0;
+  let todaysSales = 0;
 
   products.forEach(product => {
 
-    inventoryValue += product.cost * product.onHand;
+    const cost = Number(product.cost) || 0;
+    const onHand = Number(product.onHand) || 0;
+    const reorder = Number(product.reorderLevel) || 0;
+
+    inventoryValue += cost * onHand;
+
+    if (onHand <= reorder) {
+      lowStock++;
+    }
+
+  });
+
+  transactions.forEach(row => {
+
+    const transactionDate = new Date(row[2]);
+    transactionDate.setHours(0, 0, 0, 0);
+
+    if (transactionDate.getTime() === today.getTime()) {
+
+      const quantity = Number(row[11]) || 0;
+      const price = Number(row[13]) || 0;
+
+      todaysSales += quantity * price;
+
+    }
 
   });
 
   return {
 
-    totalProducts: totalProducts,
-
+    totalProducts: products.length,
     inventoryValue: inventoryValue,
-
-    lowStock: lowStock.length,
-
-    todaysSales: 0,
-
+    lowStock: lowStock,
+    todaysSales: todaysSales,
     todaysProfit: 0,
-
     promotionalToday: 0
 
   };

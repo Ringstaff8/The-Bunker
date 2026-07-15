@@ -217,3 +217,17 @@ function testCreateInventoryAdjustment() {
   }, -2);
 
 }
+
+function getTransactions() {
+
+  const sheet = SpreadsheetApp
+    .getActive()
+    .getSheetByName("Transactions");
+
+  const data = sheet.getDataRange().getValues();
+
+  data.shift();
+
+  return data;
+
+}

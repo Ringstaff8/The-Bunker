@@ -12,24 +12,29 @@
 
 <div class="container">
 
-    <h1>🌪️ The Bunker Dashboard</h1>
+    <div class="dashboardHeader">
+
+    <div class="logoArea">
+
+        <img id="bunkerLogo"
+             src="https://placehold.co/110x110?text=Logo"
+             alt="The Bunker Logo">
+
+    </div>
+
+    <h1>THE BUNKER</h1>
+
+    <h3>Inventory & Point of Sale</h3>
+
+    <p class="statusMessage">
+        Ready for another great day!
+    </p>
+
+</div>
+
+   
 
     <div class="dashboard-grid">
-
-        <div class="tile">
-            <h2 id="products">0</h2>
-            <p>Products</p>
-        </div>
-
-        <div class="tile">
-            <h2 id="inventoryValue">$0.00</h2>
-            <p>Inventory Value</p>
-        </div>
-
-        <div class="tile">
-            <h2 id="lowStock">0</h2>
-            <p>Low Stock</p>
-        </div>
 
         <div class="tile">
             <h2 id="todaysSales">$0.00</h2>
@@ -42,8 +47,69 @@
         </div>
 
         <div class="tile">
+            <h2 id="inventoryValue">$0.00</h2>
+            <p>Inventory Value</p>
+        </div>
+
+        <div class="tile">
+            <h2 id="products">0</h2>
+            <p>Products</p>
+        </div>
+
+        <div class="tile">
+            <h2 id="lowStock">0</h2>
+            <p>Low Stock</p>
+        </div>
+
+        <div class="tile">
             <h2 id="promoToday">0</h2>
             <p>Promotional Today</p>
+        </div>
+
+    </div>
+
+    <div class="dashboardSection">
+
+        <h2>⚠ Alerts</h2>
+
+        <div id="dashboardAlerts">
+
+            <ul>
+                <li>Loading alerts...</li>
+            </ul>
+
+        </div>
+
+    </div>
+
+    <div class="dashboardSection">
+
+        <h2>⚡ Quick Actions</h2>
+
+        <div class="quickActions">
+
+            <button disabled>🛒 Ring Up Sale</button>
+
+            <button disabled>🎁 Promotional</button>
+
+            <button disabled>📦 Inventory</button>
+
+            <button disabled>📊 Reports</button>
+
+        </div>
+
+    </div>
+
+    <div class="dashboardSection">
+
+        <h2>🕒 Recent Activity</h2>
+
+        <div id="recentActivity">
+
+            <ul>
+                <li>Loading activity...</li>
+            </ul>
+
         </div>
 
     </div>
@@ -55,14 +121,18 @@
 window.onload = function(){
 
     google.script.run
+    .withSuccessHandler(loadDashboard)
+    .withFailureHandler(function(error){
 
-        .withSuccessHandler(loadDashboard)
+        alert("Dashboard Error:\n\n" + error.message);
 
-        .getDashboardStats();
+    })
+    .getDashboardStats();
 
 }
 
 function loadDashboard(stats){
+
 
     document.getElementById("products").innerHTML =
         stats.totalProducts;
@@ -81,6 +151,32 @@ function loadDashboard(stats){
 
     document.getElementById("promoToday").innerHTML =
         stats.promotionalToday;
+
+    // -----------------------------
+    // Status Message
+    // -----------------------------
+
+    document.querySelector(".statusMessage").textContent =
+        stats.statusMessage;
+
+    // -----------------------------
+    // Alerts
+    // -----------------------------
+
+    const alertContainer =
+        document.getElementById("dashboardAlerts");
+
+    let html = "<ul>";
+
+    stats.alerts.forEach(function(alert){
+
+        html += "<li>" + alert + "</li>";
+
+    });
+
+    html += "</ul>";
+
+    alertContainer.innerHTML = html;
 
 }
 

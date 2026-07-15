@@ -550,4 +550,198 @@ table tr:hover{
     }
 
 }
+/* ==========================================================
+   DASHBOARD MISSION CONTROL
+   ========================================================== */
+
+.dashboardHeader{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+.dashboardHeader h1{
+
+    margin:0;
+
+    font-size:40px;
+
+    color:var(--primary);
+
+}
+
+.dashboardHeader h3{
+
+    margin:8px 0;
+
+    color:#555;
+
+    font-weight:normal;
+
+}
+
+.statusMessage{
+
+    display:inline-block;
+
+    margin-top:12px;
+
+    padding:10px 20px;
+
+    background:#EAF4FF;
+
+    border:2px solid var(--primary);
+
+    border-radius:25px;
+
+    color:var(--primary);
+
+    font-weight:bold;
+
+}
+
+/* Dashboard Sections */
+
+.dashboardSection{
+
+    background:var(--card);
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+
+    padding:20px;
+
+    margin-top:25px;
+
+}
+
+.dashboardSection h2{
+
+    color:var(--primary);
+
+    margin-bottom:15px;
+
+}
+
+/* Alerts */
+
+#dashboardAlerts ul{
+
+    margin:0;
+
+    padding-left:22px;
+
+}
+
+#dashboardAlerts li{
+
+    margin:10px 0;
+
+    font-size:16px;
+
+}
+
+/* Quick Actions */
+
+.quickActions{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:15px;
+
+}
+
+.quickActions button{
+
+    background:var(--primary);
+
+    color:white;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:10px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    transition:var(--transition);
+
+}
+
+.quickActions button:hover{
+
+    background:var(--primary-dark);
+
+    transform:translateY(-2px);
+
+}
+
+.quickActions button:disabled{
+
+    background:#B9C2CF;
+
+    cursor:default;
+
+    transform:none;
+
+}
+
+/* Recent Activity */
+
+#recentActivity ul{
+
+    margin:0;
+
+    padding-left:22px;
+
+}
+
+#recentActivity li{
+
+    margin:10px 0;
+
+}
+
+/* Mobile */
+
+@media(max-width:700px){
+
+    .quickActions{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+/* ---------- Dashboard Logo ---------- */
+
+.logoArea{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-bottom:15px;
+
+}
+
+#bunkerLogo{
+
+    width:110px;
+
+    height:110px;
+
+    object-fit:contain;
+
+}
+
 </style>

@@ -86,6 +86,14 @@ function showPromotional() {
 
 }
 
+function showInventorySessionHistoryReport() {
+
+  SpreadsheetApp.getUi().alert(
+    "This report is temporarily unavailable while it is being rebuilt."
+  );
+
+}
+
 function showProducts() {
 
   SpreadsheetApp.getUi().alert(
