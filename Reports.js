@@ -248,7 +248,9 @@ function getLowStockReport() {
 
       const onHand = Number(product[PRODUCT_COLUMNS.ONHAND]) || 0;
       const reorderLevel = Number(product[PRODUCT_COLUMNS.REORDER]) || 0;
-      const active = product[PRODUCT_COLUMNS.ACTIVE];
+
+      const active =
+        String(product[PRODUCT_COLUMNS.ACTIVE]).trim().toUpperCase() === "Y";
 
       return active && onHand <= reorderLevel;
 
