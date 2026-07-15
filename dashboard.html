@@ -178,6 +178,33 @@ function loadDashboard(stats){
 
     alertContainer.innerHTML = html;
 
+    // -----------------------------
+// Recent Activity
+// -----------------------------
+
+const activityContainer =
+    document.getElementById("recentActivity");
+
+let activityHtml = "";
+
+stats.recentActivity.forEach(function(item){
+
+    activityHtml += `
+        <div class="activityRow">
+            <div class="activityTime">${item.time}</div>
+            <div class="activityType">${item.transactionType}</div>
+            <div class="activityProduct">
+                ${item.productName}
+            </div>
+            <div class="activityQty">
+                Qty: ${item.quantity}
+            </div>
+        </div>
+    `;
+
+});
+
+activityContainer.innerHTML = activityHtml;
 }
 
 </script>

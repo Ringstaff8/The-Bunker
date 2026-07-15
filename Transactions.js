@@ -231,3 +231,25 @@ function getTransactions() {
   return data;
 
 }
+
+function getRecentActivity(limit = 10) {
+
+  const transactions = getTransactions();
+
+  return transactions
+    .slice()
+    .reverse()
+    .slice(0, limit)
+    .map(function(row) {
+
+      return {
+        transactionType: String(row[1]),
+        time: String(row[3]),
+        productName: String(row[8]),
+        quantity: Number(row[11]) || 0,
+        paymentType: String(row[15])
+      };
+
+    });
+
+}

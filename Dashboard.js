@@ -30,6 +30,7 @@ function getDashboardStats() {
   const products = getProducts();
 const transactions = getTransactions();
 const lowStockProducts = getLowStockReport();
+const recentActivity = getRecentActivity(10);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -42,11 +43,10 @@ let promotionalToday = 0;
 
   products.forEach(product => {
 
-    const cost = Number(product.cost) || 0;
-    const onHand = Number(product.onHand) || 0;
-    const reorder = Number(product.reorderLevel) || 0;
+ const cost = Number(product[PRODUCT_COLUMNS.COST]) || 0;
+const onHand = Number(product[PRODUCT_COLUMNS.ONHAND]) || 0;
 
-    inventoryValue += cost * onHand;
+inventoryValue += cost * onHand;
 
   });
 transactions.forEach(row => {
@@ -102,7 +102,8 @@ if (alerts.length === 0) {
   todaysSales: todaysSales,
   todaysProfit: todaysProfit,
   promotionalToday: promotionalToday,
-  alerts: alerts
+  alerts: alerts,
+recentActivity: recentActivity
 };
 
 }
