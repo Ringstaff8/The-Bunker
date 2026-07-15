@@ -2,190 +2,184 @@
 <html>
 
 <head>
+
   <base target="_top">
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
+
+    body{
+      font-family:Arial,sans-serif;
+      margin:20px;
     }
 
-    h2 {
-      margin-top: 0;
+    h2{
+      margin-top:0;
     }
 
-    .summaryBar {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
+    .summaryBar{
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+      margin-bottom:20px;
     }
 
-    .card {
-      flex: 1;
-      min-width: 170px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 12px;
-      text-align: center;
-      background: #f8f9fa;
+    .card{
+      flex:1;
+      min-width:170px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      padding:12px;
+      text-align:center;
+      background:#f8f9fa;
     }
 
-    .card h3 {
-      margin: 6px 0 0;
-      font-size: 26px;
-      color: #1a73e8;
+    .card h3{
+      margin:6px 0 0;
+      font-size:26px;
+      color:#1a73e8;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    table{
+      width:100%;
+      border-collapse:collapse;
     }
 
-    th {
-      background: #1a73e8;
-      color: white;
-      padding: 8px;
-      text-align: left;
+    th{
+      background:#1a73e8;
+      color:white;
+      padding:8px;
+      text-align:left;
     }
 
-    td {
-      padding: 8px;
-      border-bottom: 1px solid #ddd;
+    td{
+      padding:8px;
+      border-bottom:1px solid #ddd;
     }
 
-    tr:nth-child(even) {
-      background: #f9f9f9;
+    tr:nth-child(even){
+      background:#f9f9f9;
     }
 
-    tr:hover {
-      background: #eef5ff;
+    tr:hover{
+      background:#eef5ff;
     }
 
-    .buttons {
-      margin-top: 20px;
-      text-align: right;
+    .completed{
+      color:green;
+      font-weight:bold;
     }
 
-    button {
-      padding: 8px 16px;
-      margin-left: 10px;
+    .open{
+      color:#d48b00;
+      font-weight:bold;
     }
 
-    .completed {
-      color: green;
-      font-weight: bold;
+    .buttons{
+      margin-top:20px;
+      text-align:right;
     }
 
-    .open {
-      color: #d48b00;
-      font-weight: bold;
+    button{
+      padding:8px 16px;
+      margin-left:10px;
     }
+
   </style>
+
 </head>
 
 <body>
 
-  <h2>Inventory Session History Report</h2>
+<h2>Inventory Session History Report</h2>
 
-  <div id="summaryBar" class="summaryBar"></div>
+<div id="summaryBar" class="summaryBar">
+</div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Session ID</th>
-        <th>Started</th>
-        <th>Started By</th>
-      
-        <th>Status</th>
-        <th>Last Updated</th>
-        <th>Completed</th>
-      </tr>
-    </thead>
+<table>
 
-    <tbody id="reportBody"></tbody>
-  </table>
+<thead>
 
-  <div class="buttons">
-    <button onclick="window.print()">Print</button>
-    <button onclick="google.script.host.close()">Close</button>
-  </div>
+<tr>
 
-  <script>
+<th>Session ID</th>
+<th>Started</th>
+<th>Started By</th>
+<th>Status</th>
+<th>Last Updated</th>
+<th>Completed</th>
 
-    function formatDate(value) {
-      if (!value) return "";
-      return new Date(value).toLocaleString();
-    }
+</tr>
 
-    function loadReport() {
+</thead>
 
-      google.script.run
-        .withSuccessHandler(renderReport)
-        .withFailureHandler(function (err) {
-          alert(err.message);
-        })
-        .getInventorySessionHistoryReport();
+<tbody id="reportBody">
 
-    }
+<tr>
 
-    function renderReport(report) {
+<td colspan="6">
+Loading...
+</td>
 
-      const s = report.summary;
+</tr>
 
-      document.getElementById("summaryBar").innerHTML = `
-        <div class="card">
-          <div>Total Sessions</div>
-          <h3>${s.totalSessions}</h3>
-        </div>
+</tbody>
 
-        <div class="card">
-          <div>Open Sessions</div>
-          <h3>${s.openSessions}</h3>
-        </div>
+</table>
 
-        <div class="card">
-          <div>Completed Sessions</div>
-          <h3>${s.completedSessions}</h3>
-        </div>
+<div class="buttons">
 
-        <div class="card">
-          <div>Last Inventory</div>
-          <h3 style="font-size:16px;">
-            ${formatDate(s.lastInventory)}
-          </h3>
-        </div>
-      `;
+<button onclick="window.print()">
+Print
+</button>
 
-      const body = document.getElementById("reportBody");
-      body.innerHTML = "";
+<button onclick="google.script.host.close()">
+Close
+</button>
 
-      report.sessions.forEach(session => {
+</div>
 
-        const statusClass =
-          String(session.status).toUpperCase() === "COMPLETED"
-            ? "completed"
-            : "open";
+<script>
 
-        body.innerHTML += `
-          <tr>
-            <td>${session.sessionId}</td>
-            <td>${formatDate(session.started)}</td>
-            <td>${session.startedBy}</td>
-            
-            <td class="${statusClass}">${session.status}</td>
-            <td>${formatDate(session.lastUpdated)}</td>
-            <td>${formatDate(session.completed)}</td>
-          </tr>
-        `;
+function formatDate(value){
 
-      });
+  if(!value) return "";
 
-    }
+  return new Date(value).toLocaleString();
 
-    loadReport();
+}
 
-  </script>
+function loadReport() {
+
+  alert("Calling server...");
+
+  google.script.run
+    .withSuccessHandler(function(report) {
+
+      alert("SUCCESS HANDLER");
+
+      console.log(report);
+
+      alert(JSON.stringify(report));
+
+    })
+    .withFailureHandler(function(err) {
+
+  console.error(err);
+
+  alert(
+    "SERVER ERROR\n\n" +
+    JSON.stringify(err, null, 2)
+  );
+
+})
+    .getInventorySessionHistoryReport();
+
+}
+
+loadReport();
+
+</script>
+
 
 </body>
 

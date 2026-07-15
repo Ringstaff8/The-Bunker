@@ -491,3 +491,162 @@ function getSalesReport(startDate, endDate) {
 
   };
 }
+
+function getInventorySessionHistoryReport() {
+
+  try {
+
+    // EVERYTHING that is currently in the function goes here
+
+  Logger.log("STEP 1");
+
+  const sheet = getInventorySessionsSheet();
+
+  Logger.log("STEP 2");
+
+  const data = sheet.getDataRange().getValues();
+
+  Logger.log("Rows: " + data.length);
+
+  if (data.length <= 1) {
+
+    Logger.log("STEP 3");
+
+    return {
+      summary: {
+        totalSessions: 0,
+        openSessions: 0,
+        completedSessions: 0,
+        lastInventory: ""
+      },
+      sessions: []
+    };
+
+  }
+
+  Logger.log("STEP 4");
+
+  data.shift();
+
+  const sessions = [];
+
+  Logger.log("STEP 5");
+
+  data.forEach(function(row) {
+
+    Logger.log("Processing: " + row[0]);
+
+    sessions.push({
+      sessionId: row[INVENTORY_SESSION_COLUMNS.SESSION_ID],
+      started: row[INVENTORY_SESSION_COLUMNS.STARTED],
+      startedBy: row[INVENTORY_SESSION_COLUMNS.STARTED_BY],
+      status: row[INVENTORY_SESSION_COLUMNS.STATUS],
+      lastUpdated: row[INVENTORY_SESSION_COLUMNS.LAST_UPDATED],
+      completed: row[INVENTORY_SESSION_COLUMNS.COMPLETED]
+    });
+
+  });
+
+  Logger.log("STEP 6");
+
+const report = {
+  summary: {
+    totalSessions: sessions.length,
+    openSessions: openSessions,
+    completedSessions: completedSessions,
+    lastInventory: lastInventory ? String(lastInventory) : ""
+  },
+  sessions: sessions.map(function(s) {
+    return {
+      sessionId: String(s.sessionId || ""),
+      started: s.started ? new Date(s.started).toISOString() : "",
+      startedBy: String(s.startedBy || ""),
+      status: String(s.status || ""),
+      lastUpdated: s.lastUpdated ? new Date(s.lastUpdated).toISOString() : "",
+      completed: s.completed ? new Date(s.completed).toISOString() : ""
+    };
+  })
+};
+
+    return report;
+
+  } catch (err) {
+
+    Logger.log("ERROR:");
+    Logger.log(err);
+    Logger.log(err.stack);
+
+    throw err;
+
+  }
+
+}
+
+function getInventoryValuationReport() {
+
+  const products = getActiveProducts();
+
+  let totalProducts = 0;
+  let totalUnits = 0;
+  let totalCost = 0;
+  let totalRetail = 0;
+
+  const reportProducts = [];
+
+  products.forEach(function(product) {
+
+    const qty = Number(product[PRODUCT_COLUMNS.ONHAND]) || 0;
+    const cost = Number(product[PRODUCT_COLUMNS.COST]) || 0;
+    const price = Number(product[PRODUCT_COLUMNS.PRICE]) || 0;
+
+    const inventoryCost = qty * cost;
+    const inventoryRetail = qty * price;
+    const expectedProfit = inventoryRetail - inventoryCost;
+
+    totalProducts++;
+    totalUnits += qty;
+    totalCost += inventoryCost;
+    totalRetail += inventoryRetail;
+
+    reportProducts.push({
+
+      sku: product[PRODUCT_COLUMNS.SKU],
+      collection: product[PRODUCT_COLUMNS.COLLECTION],
+      product: product[PRODUCT_COLUMNS.NAME],
+      size: product[PRODUCT_COLUMNS.SIZE],
+
+      qty: qty,
+      cost: cost,
+      price: price,
+
+      inventoryCost: inventoryCost,
+      inventoryRetail: inventoryRetail,
+      expectedProfit: expectedProfit
+
+    });
+
+  });
+
+  reportProducts.sort(function(a, b) {
+    return a.collection.localeCompare(b.collection) ||
+           a.product.localeCompare(b.product) ||
+           a.size.localeCompare(b.size);
+  });
+
+  return {
+
+    summary: {
+
+      totalProducts: totalProducts,
+      totalUnits: totalUnits,
+      totalCost: totalCost,
+      totalRetail: totalRetail,
+      expectedProfit: totalRetail - totalCost
+
+    },
+
+    products: reportProducts
+
+  };
+
+}
