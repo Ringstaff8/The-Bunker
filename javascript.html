@@ -113,6 +113,28 @@ function removeFromCart(sku){
 
 }
 
+function clearCart(){
+
+    if(cart.length === 0){
+
+        alert("Cart is already empty.");
+
+        return;
+
+    }
+
+    if(!confirm("Clear all items from the cart?")){
+
+        return;
+
+    }
+
+    cart = [];
+
+    refreshCart();
+
+}
+
 function refreshCart(){
 
     const cartDiv =
@@ -241,6 +263,25 @@ function searchCollection(collection){
     searchProducts();
 
 }
+const promo = {
+
+    student:
+        document.getElementById("studentName").value,
+
+    product:
+        document.getElementById("product").value,
+
+    quantity:
+        Number(document.getElementById("quantity").value),
+
+    reason:
+        document.getElementById("reason").value,
+
+    notes:
+        document.getElementById("notes").value
+
+};
+
 const promo = {
 
     student:
