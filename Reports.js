@@ -384,8 +384,8 @@ return data.map(function(row) {
     sku: String(row[5] || ""),
     category: String(row[6] || ""),
     design: String(row[7] || ""),
-    productName: String(row[8] || ""),
-    collection: String(row[9] || ""),
+    productName: String(row[9] || ""),
+    collection: String(row[8] || ""),
     size: String(row[10] || ""),
     quantity: Number(row[11]) || 0,
     cost: Number(row[12]) || 0,
@@ -426,11 +426,26 @@ function getSalesReport(startDate, endDate) {
   // Remove header row
   data.shift();
 
-  const start = new Date(startDate);
-  start.setHours(0, 0, 0, 0);
+  const startParts = startDate.split("-").map(Number);
+const start = new Date(
+  startParts[0],
+  startParts[1] - 1,
+  startParts[2]
+);
+start.setHours(0, 0, 0, 0);
 
-  const end = new Date(endDate);
-  end.setHours(23, 59, 59, 999);
+const endParts = endDate.split("-").map(Number);
+const end = new Date(
+  endParts[0],
+  endParts[1] - 1,
+  endParts[2]
+);
+end.setHours(23, 59, 59, 999);
+
+  Logger.log("START: " + start);
+  Logger.log("END:   " + end);
+  Logger.log("START MS: " + start.getTime());
+Logger.log("END MS:   " + end.getTime());
 
   let totalRevenue = 0;
   let totalProfit = 0;
@@ -439,7 +454,7 @@ function getSalesReport(startDate, endDate) {
   const transactionIds = new Set();
   const transactions = [];
 
-  data.forEach(function(row) {
+ data.forEach(function(row) {
 
     const transactionDate = new Date(row[2]);
 
@@ -447,6 +462,18 @@ function getSalesReport(startDate, endDate) {
     if (transactionDate < start || transactionDate > end) {
       return;
     }
+
+    const transactionType = String(row[1] || "").trim();
+
+    if (transactionType !== "Sale") {
+      return;
+    }
+
+    const quantity = Number(row[11]) || 0;
+    const price = Number(row[13]) || 0;
+    const profit = Number(row[14]) || 0;
+
+    ...
 
     const quantity = Number(row[11]) || 0;
     const price = Number(row[13]) || 0;
@@ -461,13 +488,14 @@ function getSalesReport(startDate, endDate) {
     transactions.push({
 
       transactionId: String(row[0] || ""),
+
       date: Utilities.formatDate(
         transactionDate,
         Session.getScriptTimeZone(),
         "MM/dd/yyyy"
       ),
 
-      productName: String(row[8] || ""),
+      productName: String(row[9] || ""),
       quantity: quantity,
       revenue: quantity * price,
       profit: quantity * profit,
@@ -492,6 +520,7 @@ function getSalesReport(startDate, endDate) {
     transactions: transactions
 
   };
+
 }
 
 function getInventorySessionHistoryReport() {
