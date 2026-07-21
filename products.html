@@ -72,7 +72,12 @@
 
       <tr>
         <td>Category</td>
-        <td><input type="text" id="category"></td>
+       <select id="category"></select>
+      </tr>
+      
+      <tr>
+        <td>Collection</td>
+       <select id="collection"></select>
       </tr>
 
       <tr>
@@ -107,7 +112,7 @@
 
       <tr>
         <td>Vendor</td>
-        <td><input type="text" id="vendor"></td>
+        <select id="vendor"></select>
       </tr>
 
       <tr>
@@ -224,6 +229,18 @@ window.onload = function () {
         .getElementById("addProductButton")
         .addEventListener("click", openAddProduct);
 
+    google.script.run
+        .withSuccessHandler(values => loadDropdown("category", values))
+        .getUniqueProductColumnValues(2);
+
+    google.script.run
+        .withSuccessHandler(values => loadDropdown("collection", values))
+        .getUniqueProductColumnValues(4);
+
+    google.script.run
+        .withSuccessHandler(values => loadDropdown("vendor", values))
+        .getUniqueProductColumnValues(13);
+
 };
 
 function openAddProduct() {
@@ -235,6 +252,24 @@ function openAddProduct() {
 function closeAddProduct() {
 
     document.getElementById("addProductModal").style.display = "none";
+
+}
+function loadDropdown(id, values) {
+
+    const select = document.getElementById(id);
+
+    select.innerHTML = "";
+
+    values.forEach(value => {
+
+        const option = document.createElement("option");
+
+        option.value = value;
+        option.text = value;
+
+        select.appendChild(option);
+
+    });
 
 }
 

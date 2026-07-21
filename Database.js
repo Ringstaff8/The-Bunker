@@ -65,6 +65,22 @@ function getActiveProducts(){
   );
 
 }
+/**
+ * Returns true if the SKU already exists.
+ */
+function productSkuExists(sku) {
+
+  if (!sku) return false;
+
+  const products = getProducts();
+
+  return products.some(product =>
+    String(product[PRODUCT_COLUMNS.SKU]).trim().toUpperCase() ===
+    String(sku).trim().toUpperCase()
+  );
+
+}
+
 
 /**
  * Search Products
@@ -146,35 +162,40 @@ function getProductById(productId) {
 }
 
 function addProduct(product) {
+
   if (!product) {
-  throw new Error("Product object is required.");
-}
+    throw new Error("Product object is required.");
+  }
+
+  if (productSkuExists(product.sku)) {
+    throw new Error("SKU already exists.");
+  }
 
   const sheet = getProductsSheet();
 
-  const lastRow = sheet.getLastRow();
+  const row = [
 
-  const newId = Utilities.getUuid();
+    Utilities.getUuid(),                  // Product ID
+    product.sku.trim(),                   // SKU
+    product.category,                     // Category
+    product.design || "",                 // Design
+    product.collection || "",             // Collection
+    product.name.trim(),                  // Product Name
+    product.size || "",                   // Size
+    Number(product.cost) || 0,            // Cost
+    Number(product.price) || 0,           // Price
+    Number(product.onHand) || 0,          // On Hand
+    "Y",                                  // Active
+    product.trackSize ? "Y" : "N",        // Track Size
+    Number(product.reorder) || 0,         // Reorder Level
+    product.vendor || "",                 // Vendor
+    product.notes || ""                   // Notes
 
-  sheet.appendRow([
-    newId,
-    product.sku,
-    product.category,
-    product.design,
-    product.collection,
-    product.name,
-    product.size,
-    product.cost,
-    product.price,
-    product.onHand,
-    "Y",
-    product.trackSize,
-    product.reorder,
-    product.vendor,
-    product.notes
-  ]);
+  ];
 
-  return newId;
+  sheet.appendRow(row);
+
+  return true;
 
 }
 
@@ -262,4 +283,38 @@ function testCategories() {
   Logger.log(
     getUniqueProductColumnValues(PRODUCT_COLUMNS.CATEGORY)
   );
+}
+
+function testAddProduct() {
+
+  addProduct({
+
+    sku: "TEST100",
+
+    category: "Testing",
+
+    design: "",
+
+    collection: "",
+
+    name: "Test Product",
+
+    size: "M",
+
+    cost: 5,
+
+    price: 10,
+
+    onHand: 20,
+
+    trackSize: false,
+
+    reorder: 2,
+
+    vendor: "Test Vendor",
+
+    notes: "Delete me"
+
+  });
+
 }
