@@ -198,7 +198,7 @@ function loadDashboard(stats){
 
     alertContainer.innerHTML = html;
 
-    // -----------------------------
+// -----------------------------
 // Recent Activity
 // -----------------------------
 
@@ -207,19 +207,45 @@ const activityContainer =
 
 let activityHtml = "";
 
-stats.recentActivity.forEach(function(item){
+stats.recentActivity.forEach(function(item) {
+
+    // Only show the time portion
+    const displayTime = item.time;
+
+    let icon = "🛒";
+
+    if (item.transactionType === "Promotional") {
+        icon = "🎁";
+    } else if (item.transactionType === "Inventory Adjustment") {
+        icon = "📦";
+    }
 
     activityHtml += `
-        <div class="activityRow">
-            <div class="activityTime">${item.time}</div>
-            <div class="activityType">${item.transactionType}</div>
+
+        <div class="activityCard">
+
+            <div class="activityHeader">
+
+                <div class="activityType">
+                    ${icon} ${item.transactionType}
+                </div>
+
+                <div class="activityTime">
+                    ${displayTime}
+                </div>
+
+            </div>
+
             <div class="activityProduct">
                 ${item.productName}
             </div>
-            <div class="activityQty">
+
+            <div class="activityFooter">
                 Qty: ${item.quantity}
             </div>
+
         </div>
+
     `;
 
 });

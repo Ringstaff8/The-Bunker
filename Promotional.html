@@ -101,9 +101,12 @@ function submitPromo() {
     })
     .withFailureHandler(function(error){
 
-        alert("Error:\n\n" + error.message);
+    const message = String(error.message || error)
+        .replace(/^Error:\s*/i, "");
 
-    })
+    alert(message);
+
+})
     .savePromotionInfo(promo);
 
 }

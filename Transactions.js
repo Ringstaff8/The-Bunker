@@ -201,22 +201,6 @@ function createInventoryAdjustment(product, difference) {
 
 }
 
-function testCreateInventoryAdjustment() {
-
-  createInventoryAdjustment({
-
-    productId: 9999,
-    sku: "TEST-001",
-    category: "Test",
-    design: "Test",
-    collection: "Test",
-    name: "Inventory Test",
-    size: "NA",
-    cost: 1.25
-
-  }, -2);
-
-}
 
 function getTransactions() {
 
@@ -242,13 +226,18 @@ function getRecentActivity(limit = 10) {
     .slice(0, limit)
     .map(function(row) {
 
-      return {
-        transactionType: String(row[1]),
-        time: String(row[3]),
-        productName: String(row[8]),
-        quantity: Number(row[11]) || 0,
-        paymentType: String(row[15])
-      };
+   return {
+  transactionType: String(row[1]),
+  date: String(row[2]),
+  time: Utilities.formatDate(
+  new Date(row[3]),
+  Session.getScriptTimeZone(),
+  "h:mm:ss a"
+),
+  productName: String(row[9]),
+  quantity: Number(row[11]) || 0,
+  paymentType: String(row[15])
+};
 
     });
 

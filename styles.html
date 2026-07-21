@@ -756,4 +756,70 @@ table tr:hover{
 
 }
 
+#recentActivity{
+
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+    gap:16px;
+
+}
+
+.activityCard{
+
+    border:1px solid #ddd;
+    border-radius:8px;
+    padding:12px;
+    background:#fff;
+    box-shadow:0 1px 3px rgba(0,0,0,.08);
+
+}
+
+.activityHeader{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:8px;
+
+}
+
+.activityType{
+
+    font-weight:bold;
+    color:#1565c0;
+
+}
+
+.activityTime{
+
+    color:#777;
+    font-size:12px;
+    white-space:nowrap;
+
+}
+
+.activityProduct{
+
+    font-size:15px;
+    margin-bottom:6px;
+
+}
+
+.activityFooter{
+
+    font-size:13px;
+    color:#666;
+
+}
+
+@media (max-width:900px){
+
+    #recentActivity{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
 </style>
+

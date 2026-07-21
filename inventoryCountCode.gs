@@ -34,29 +34,30 @@ function loadProductsByCategory(category) {
 
   const products = getActiveProducts();
 
-  const filtered = products.filter(function(product) {
+  const filteredProducts = products.filter(function(product) {
+
     return String(product[PRODUCT_COLUMNS.CATEGORY]).trim() ===
            String(category).trim();
+
   });
 
   const detailSheet = getInventoryCountDetailsSheet();
   const detailData = detailSheet.getDataRange().getValues();
 
-  return filtered.map(function(product) {
+  return filteredProducts.map(function(product) {
 
-    let countedQty = Number(product[PRODUCT_COLUMNS.ONHAND]);
+    let countedQty = Number(product[PRODUCT_COLUMNS.ONHAND]) || 0;
 
     for (let i = 1; i < detailData.length; i++) {
 
       if (
-        detailData[i][INVENTORY_DETAIL_COLUMNS.SESSION_ID] === session.sessionId &&
-        detailData[i][INVENTORY_DETAIL_COLUMNS.CATEGORY] === category &&
-        detailData[i][INVENTORY_DETAIL_COLUMNS.PRODUCT_ID] === product[PRODUCT_COLUMNS.ID]
+        String(detailData[i][INVENTORY_DETAIL_COLUMNS.SESSION_ID]) === String(session.sessionId) &&
+        String(detailData[i][INVENTORY_DETAIL_COLUMNS.CATEGORY]).trim() === String(category).trim() &&
+        String(detailData[i][INVENTORY_DETAIL_COLUMNS.PRODUCT_ID]) === String(product[PRODUCT_COLUMNS.ID])
       ) {
 
-        countedQty = Number(
-          detailData[i][INVENTORY_DETAIL_COLUMNS.COUNTED_QTY]
-        );
+        countedQty =
+          Number(detailData[i][INVENTORY_DETAIL_COLUMNS.COUNTED_QTY]) || 0;
 
         break;
 
@@ -72,7 +73,7 @@ function loadProductsByCategory(category) {
       collection: product[PRODUCT_COLUMNS.COLLECTION],
       name: product[PRODUCT_COLUMNS.NAME],
       size: product[PRODUCT_COLUMNS.SIZE],
-      onHand: Number(product[PRODUCT_COLUMNS.ONHAND]),
+      onHand: Number(product[PRODUCT_COLUMNS.ONHAND]) || 0,
       countedQty: countedQty
     };
 

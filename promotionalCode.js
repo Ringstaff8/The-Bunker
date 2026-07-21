@@ -36,8 +36,13 @@ function completePromotion(promo) {
   );
 
   if (currentQty < 1) {
-    throw new Error("No inventory available.");
-  }
+
+  throw new Error(
+    product[PRODUCT_COLUMNS.NAME] +
+    " is out of stock."
+  );
+
+}
 
   productSheet
     .getRange(sheetRow, 10)

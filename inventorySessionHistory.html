@@ -140,38 +140,112 @@ Close
 
 <script>
 
-function formatDate(value){
+function formatDate(value) {
 
-  if(!value) return "";
+  if (!value) return "";
 
   return new Date(value).toLocaleString();
 
 }
 
-function loadReport() {
+function displayReport(report) {
 
-  alert("Calling server...");
+  //--------------------------------------------------
+  // Summary Cards
+  //--------------------------------------------------
 
-  google.script.run
-    .withSuccessHandler(function(report) {
+  const summaryBar = document.getElementById("summaryBar");
 
-      alert("SUCCESS HANDLER");
+  summaryBar.innerHTML = `
 
-      console.log(report);
+    <div class="card">
+      <div>Total Sessions</div>
+      <h3>${report.summary.totalSessions}</h3>
+    </div>
 
-      alert(JSON.stringify(report));
+    <div class="card">
+      <div>Open Sessions</div>
+      <h3>${report.summary.openSessions}</h3>
+    </div>
 
-    })
-    .withFailureHandler(function(err) {
+    <div class="card">
+      <div>Completed</div>
+      <h3>${report.summary.completedSessions}</h3>
+    </div>
 
-  console.error(err);
+    <div class="card">
+      <div>Last Inventory</div>
+      <h3 style="font-size:18px;">
+        ${report.summary.lastInventory || "None"}
+      </h3>
+    </div>
+
+  `;
+
+  //--------------------------------------------------
+  // Detail Table
+  //--------------------------------------------------
+
+  const tbody = document.getElementById("reportBody");
+
+  tbody.innerHTML = "";
+
+  if (!report.sessions || report.sessions.length === 0) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align:center;">
+          No inventory sessions found.
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+  report.sessions.forEach(function(session) {
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+
+      <td>${session.sessionId}</td>
+
+      <td>${formatDate(session.started)}</td>
+
+      <td>${session.startedBy}</td>
+
+      <td class="${session.status === "COMPLETED" ? "completed" : "open"}">
+        ${session.status}
+      </td>
+
+      <td>${formatDate(session.lastUpdated)}</td>
+
+      <td>${formatDate(session.completed)}</td>
+
+    `;
+
+    tbody.appendChild(row);
+
+  });
+
+}
+
+function showError(error) {
 
   alert(
-    "SERVER ERROR\n\n" +
-    JSON.stringify(err, null, 2)
+    "The Inventory Session History Report could not be generated.\n\n" +
+    error.message
   );
 
-})
+}
+
+function loadReport() {
+
+  google.script.run
+    .withSuccessHandler(displayReport)
+    .withFailureHandler(showError)
     .getInventorySessionHistoryReport();
 
 }

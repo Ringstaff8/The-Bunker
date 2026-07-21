@@ -85,43 +85,36 @@ function searchProducts(searchText){
 
   });
 
-}/**
- * Search Test
- */
-function testSearch(){
-
-  const results = searchProducts("t");
-
-  Logger.log(results);
-
-}
-function getInventorySessionsSheet() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-
-  let sheet = ss.getSheetByName("Inventory Sessions");
-
-  if (!sheet) {
-    sheet = ss.insertSheet("Inventory Sessions");
-
-    sheet.appendRow([
-      "Session ID",
-      "Started",
-      "Started By",
-      "Status",
-      "Last Updated",
-      "Completed"
-    ]);
-  }
 
   return sheet;
 }
 
+function searchProducts(searchText){
+
+  const search = String(searchText).toLowerCase().trim();
+
+  const products = getActiveProducts();
+
+  return products.filter(product => {
+
+    return product.some(field =>
+
+      String(field).toLowerCase().includes(search)
+
+    );
+
+  });
+
+}
+
 function getInventoryCountDetailsSheet() {
+
   const ss = SpreadsheetApp.getActiveSpreadsheet();
 
   let sheet = ss.getSheetByName("Inventory Count Details");
 
   if (!sheet) {
+
     sheet = ss.insertSheet("Inventory Count Details");
 
     sheet.appendRow([
@@ -134,7 +127,9 @@ function getInventoryCountDetailsSheet() {
       "Difference",
       "Saved"
     ]);
+
   }
 
   return sheet;
+
 }

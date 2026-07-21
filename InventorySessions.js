@@ -165,6 +165,7 @@ function saveInventoryCategory(sessionId, category, rows) {
   };
 
 }
+
 function saveInventoryCount(category, rows) {
 
   const session = getOrCreateInventorySession();
@@ -219,39 +220,10 @@ function getOrCreateInventorySession() {
   return getOpenInventorySession();
 
 }
-function testGetOrCreateInventorySession() {
-  try {
-    const session = getOrCreateInventorySession();
 
-    Logger.log("SUCCESS");
-    Logger.log(JSON.stringify(session));
-
-    return session;
-
-  } catch (err) {
-
-    Logger.log("ERROR");
-    Logger.log(err);
-    throw err;
-
-  }
-}
 function getCurrentInventorySession() {
 
-  const session = getOrCreateInventorySession();
-
-  Logger.log("getCurrentInventorySession called");
-  Logger.log(JSON.stringify(session));
-
-  return session;
-
-}
-
-function testGetCurrentInventorySession() {
-
-  const session = getCurrentInventorySession();
-
-  Logger.log(session);
+  return getOrCreateInventorySession();
 
 }
 
@@ -373,7 +345,6 @@ function applyInventoryCount() {
 }
 
 
-
 function getLastCompletedInventorySession() {
 
   const sheet = getInventorySessionsSheet();
@@ -402,10 +373,4 @@ function getLastCompletedInventorySession() {
   return null;
 
 }
-function testGetLastCompletedInventorySession() {
 
-  const session = getLastCompletedInventorySession();
-
-  Logger.log(JSON.stringify(session));
-
-}

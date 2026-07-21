@@ -75,16 +75,6 @@ function showInventoryValuationReport() {
 
 }
 
-function showInventorySessionHistoryReport() {
-
-  showDialog(
-    "inventorySessionHistory",
-    "Inventory Session History Report",
-    1100,
-    700
-  );
-
-}
 
 function showInventoryAdjustmentReport() {
 
@@ -442,10 +432,6 @@ const end = new Date(
 );
 end.setHours(23, 59, 59, 999);
 
-  Logger.log("START: " + start);
-  Logger.log("END:   " + end);
-  Logger.log("START MS: " + start.getTime());
-Logger.log("END MS:   " + end.getTime());
 
   let totalRevenue = 0;
   let totalProfit = 0;
@@ -468,12 +454,6 @@ Logger.log("END MS:   " + end.getTime());
     if (transactionType !== "Sale") {
       return;
     }
-
-    const quantity = Number(row[11]) || 0;
-    const price = Number(row[13]) || 0;
-    const profit = Number(row[14]) || 0;
-
-    ...
 
     const quantity = Number(row[11]) || 0;
     const price = Number(row[13]) || 0;
@@ -527,83 +507,103 @@ function getInventorySessionHistoryReport() {
 
   try {
 
-    // EVERYTHING that is currently in the function goes here
+    const sheet = getInventorySessionsSheet();
+    const data = sheet.getDataRange().getValues();
 
-  Logger.log("STEP 1");
+    if (data.length <= 1) {
 
-  const sheet = getInventorySessionsSheet();
+      return {
+        summary: {
+          totalSessions: 0,
+          openSessions: 0,
+          completedSessions: 0,
+          lastInventory: ""
+        },
+        sessions: []
+      };
 
-  Logger.log("STEP 2");
+    }
 
-  const data = sheet.getDataRange().getValues();
+    // Remove header row
+    data.shift();
 
-  Logger.log("Rows: " + data.length);
+    const sessions = [];
 
-  if (data.length <= 1) {
+    let openSessions = 0;
+    let completedSessions = 0;
+    let lastInventory = null;
 
-    Logger.log("STEP 3");
+    data.forEach(function(row) {
 
-    return {
-      summary: {
-        totalSessions: 0,
-        openSessions: 0,
-        completedSessions: 0,
-        lastInventory: ""
-      },
-      sessions: []
-    };
+      sessions.push({
+        sessionId: row[INVENTORY_SESSION_COLUMNS.SESSION_ID],
+        started: row[INVENTORY_SESSION_COLUMNS.STARTED],
+        startedBy: row[INVENTORY_SESSION_COLUMNS.STARTED_BY],
+        status: row[INVENTORY_SESSION_COLUMNS.STATUS],
+        lastUpdated: row[INVENTORY_SESSION_COLUMNS.LAST_UPDATED],
+        completed: row[INVENTORY_SESSION_COLUMNS.COMPLETED]
+      });
 
-  }
+      if (row[INVENTORY_SESSION_COLUMNS.STATUS] === "OPEN") {
+        openSessions++;
+      }
 
-  Logger.log("STEP 4");
+      if (row[INVENTORY_SESSION_COLUMNS.STATUS] === "COMPLETED") {
 
-  data.shift();
+        completedSessions++;
 
-  const sessions = [];
+        const completedDate =
+          row[INVENTORY_SESSION_COLUMNS.COMPLETED];
 
-  Logger.log("STEP 5");
+        if (
+          completedDate &&
+          (!lastInventory || completedDate > lastInventory)
+        ) {
+          lastInventory = completedDate;
+        }
 
-  data.forEach(function(row) {
+      }
 
-    Logger.log("Processing: " + row[0]);
-
-    sessions.push({
-      sessionId: row[INVENTORY_SESSION_COLUMNS.SESSION_ID],
-      started: row[INVENTORY_SESSION_COLUMNS.STARTED],
-      startedBy: row[INVENTORY_SESSION_COLUMNS.STARTED_BY],
-      status: row[INVENTORY_SESSION_COLUMNS.STATUS],
-      lastUpdated: row[INVENTORY_SESSION_COLUMNS.LAST_UPDATED],
-      completed: row[INVENTORY_SESSION_COLUMNS.COMPLETED]
     });
 
-  });
+    const report = {
+      summary: {
+        totalSessions: sessions.length,
+        openSessions: openSessions,
+        completedSessions: completedSessions,
+        lastInventory: lastInventory
+          ? Utilities.formatDate(
+              new Date(lastInventory),
+              Session.getScriptTimeZone(),
+              "MM/dd/yyyy"
+            )
+          : ""
+      },
+      sessions: sessions.map(function(s) {
 
-  Logger.log("STEP 6");
+        return {
+          sessionId: String(s.sessionId || ""),
+          started: s.started
+            ? new Date(s.started).toISOString()
+            : "",
+          startedBy: String(s.startedBy || ""),
+          status: String(s.status || ""),
+          lastUpdated: s.lastUpdated
+            ? new Date(s.lastUpdated).toISOString()
+            : "",
+          completed: s.completed
+            ? new Date(s.completed).toISOString()
+            : ""
+        };
 
-const report = {
-  summary: {
-    totalSessions: sessions.length,
-    openSessions: openSessions,
-    completedSessions: completedSessions,
-    lastInventory: lastInventory ? String(lastInventory) : ""
-  },
-  sessions: sessions.map(function(s) {
-    return {
-      sessionId: String(s.sessionId || ""),
-      started: s.started ? new Date(s.started).toISOString() : "",
-      startedBy: String(s.startedBy || ""),
-      status: String(s.status || ""),
-      lastUpdated: s.lastUpdated ? new Date(s.lastUpdated).toISOString() : "",
-      completed: s.completed ? new Date(s.completed).toISOString() : ""
+      })
     };
-  })
-};
 
     return report;
 
   } catch (err) {
 
-    Logger.log("ERROR:");
+    Logger.log("getInventorySessionHistoryReport() failed");
     Logger.log(err);
     Logger.log(err.stack);
 
