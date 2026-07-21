@@ -243,3 +243,23 @@ function deleteProduct(productId) {
 
 }
 
+/**
+ * Returns a sorted list of unique values from a Products column.
+ */
+function getUniqueProductColumnValues(columnIndex) {
+
+  const products = getProducts();
+
+  const values = products
+    .map(row => String(row[columnIndex]).trim())
+    .filter(value => value !== "");
+
+  return [...new Set(values)].sort();
+
+}
+
+function testCategories() {
+  Logger.log(
+    getUniqueProductColumnValues(PRODUCT_COLUMNS.CATEGORY)
+  );
+}
