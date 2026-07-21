@@ -70,15 +70,31 @@
         <td><input type="text" id="sku"></td>
       </tr>
 
+    <tr>
+  <td>Category</td>
+  <td>
+    <select id="category"></select>
+  </td>
+</tr>
+
+     <tr>
+  <td>Collection</td>
+  <td>
+    <select id="collection"></select>
+  </td>
+</tr>
+
       <tr>
-        <td>Category</td>
-       <select id="category"></select>
-      </tr>
-      
-      <tr>
-        <td>Collection</td>
-       <select id="collection"></select>
-      </tr>
+  <td>Design</td>
+  <td><input type="text" id="design"></td>
+</tr>
+
+<tr>
+  <td>Track Size</td>
+  <td>
+    <input type="checkbox" id="trackSize">
+  </td>
+</tr>
 
       <tr>
         <td>Product Name</td>
@@ -86,9 +102,11 @@
       </tr>
 
       <tr>
-        <td>Size</td>
-        <td><input type="text" id="size"></td>
-      </tr>
+  <td>Size</td>
+  <td>
+    <select id="size"></select>
+  </td>
+</tr>
 
       <tr>
         <td>Cost</td>
@@ -106,14 +124,23 @@
       </tr>
 
       <tr>
+  <td>Active</td>
+  <td>
+    <input type="checkbox" id="active" checked>
+  </td>
+</tr>
+
+      <tr>
         <td>Reorder Level</td>
         <td><input type="number" id="reorder"></td>
       </tr>
 
       <tr>
-        <td>Vendor</td>
-        <select id="vendor"></select>
-      </tr>
+  <td>Vendor</td>
+  <td>
+    <select id="vendor"></select>
+  </td>
+</tr>
 
       <tr>
         <td>Notes</td>
@@ -240,6 +267,10 @@ window.onload = function () {
     google.script.run
         .withSuccessHandler(values => loadDropdown("vendor", values))
         .getUniqueProductColumnValues(13);
+        
+    google.script.run
+    .withSuccessHandler(values => loadDropdown("size", values))
+    .getUniqueProductColumnValues(6);
 
 };
 
@@ -270,6 +301,84 @@ function loadDropdown(id, values) {
         select.appendChild(option);
 
     });
+
+}
+
+function saveProduct() {
+
+   const product = {
+
+    sku: document.getElementById("sku").value.trim(),
+    category: document.getElementById("category").value,
+    design: document.getElementById("design").value.trim(),
+    collection: document.getElementById("collection").value,
+    name: document.getElementById("name").value.trim(),
+    size: document.getElementById("size").value,
+    cost: document.getElementById("cost").value,
+    price: document.getElementById("price").value,
+    onHand: document.getElementById("onHand").value,
+    active: document.getElementById("active").checked,
+    trackSize: document.getElementById("trackSize").checked,
+    reorder: document.getElementById("reorder").value,
+    vendor: document.getElementById("vendor").value,
+    notes: document.getElementById("notes").value.trim()
+
+};
+
+    if (!product.sku) {
+        alert("SKU is required.");
+        return;
+    }
+
+    if (!product.name) {
+        alert("Product Name is required.");
+        return;
+    }
+
+    if (!product.category) {
+        alert("Category is required.");
+        return;
+    }
+
+    google.script.run
+        .withSuccessHandler(productSaved)
+        .withFailureHandler(productSaveFailed)
+        .addProduct(product);
+
+}
+function productSaved() {
+
+    closeAddProduct();
+
+    clearProductForm();
+
+    loadProducts();
+
+    alert("Product added successfully.");
+
+}
+
+
+function productSaveFailed(error) {
+
+    alert(error.message);
+
+}
+
+function clearProductForm() {
+
+    document.getElementById("sku").value = "";
+    document.getElementById("design").value = "";
+    document.getElementById("name").value = "";
+
+    document.getElementById("cost").value = "";
+document.getElementById("price").value = "";
+document.getElementById("onHand").value = "";
+document.getElementById("reorder").value = "";
+
+    document.getElementById("notes").value = "";
+
+    document.getElementById("trackSize").checked = false;
 
 }
 

@@ -173,25 +173,25 @@ function addProduct(product) {
 
   const sheet = getProductsSheet();
 
-  const row = [
+const row = [
 
-    Utilities.getUuid(),                  // Product ID
-    product.sku.trim(),                   // SKU
-    product.category,                     // Category
-    product.design || "",                 // Design
-    product.collection || "",             // Collection
-    product.name.trim(),                  // Product Name
-    product.size || "",                   // Size
-    Number(product.cost) || 0,            // Cost
-    Number(product.price) || 0,           // Price
-    Number(product.onHand) || 0,          // On Hand
-    "Y",                                  // Active
-    product.trackSize ? "Y" : "N",        // Track Size
-    Number(product.reorder) || 0,         // Reorder Level
-    product.vendor || "",                 // Vendor
-    product.notes || ""                   // Notes
+  Utilities.getUuid(),                  // Product ID
+  product.sku.trim(),                   // SKU
+  product.category,                     // Category
+  product.design || "",                 // Design
+  product.collection || "",             // Collection
+  product.name.trim(),                  // Product Name
+  product.size || "",                   // Size
+  Number(product.cost) || 0,            // Cost
+  Number(product.price) || 0,           // Price
+  Number(product.onHand) || 0,          // On Hand
+  product.active ? "Y" : "N",           // Active
+  product.trackSize ? "Y" : "N",        // Track Size
+  Number(product.reorder) || 0,         // Reorder Level
+  product.vendor || "",                 // Vendor
+  product.notes || ""                   // Notes
 
-  ];
+];
 
   sheet.appendRow(row);
 
