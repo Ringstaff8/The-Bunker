@@ -17,9 +17,9 @@
 
         <h2>Product Maintenance</h2>
 
-        <button onclick="comingSoon()">
-            + Add Product
-        </button>
+        <button id="addProductButton">
+    + Add Product
+</button>
 
     </div>
 
@@ -56,6 +56,81 @@
     </table>
 
 </div>
+<!-- Add Product Modal -->
+<div id="addProductModal" class="modal" style="display:none;">
+
+  <div class="modalContent">
+
+    <h2>Add New Product</h2>
+
+    <table class="formTable">
+
+      <tr>
+        <td>SKU</td>
+        <td><input type="text" id="sku"></td>
+      </tr>
+
+      <tr>
+        <td>Category</td>
+        <td><input type="text" id="category"></td>
+      </tr>
+
+      <tr>
+        <td>Product Name</td>
+        <td><input type="text" id="name"></td>
+      </tr>
+
+      <tr>
+        <td>Size</td>
+        <td><input type="text" id="size"></td>
+      </tr>
+
+      <tr>
+        <td>Cost</td>
+        <td><input type="number" id="cost" step="0.01"></td>
+      </tr>
+
+      <tr>
+        <td>Price</td>
+        <td><input type="number" id="price" step="0.01"></td>
+      </tr>
+
+      <tr>
+        <td>On Hand</td>
+        <td><input type="number" id="onHand"></td>
+      </tr>
+
+      <tr>
+        <td>Reorder Level</td>
+        <td><input type="number" id="reorder"></td>
+      </tr>
+
+      <tr>
+        <td>Vendor</td>
+        <td><input type="text" id="vendor"></td>
+      </tr>
+
+      <tr>
+        <td>Notes</td>
+        <td><textarea id="notes"></textarea></td>
+      </tr>
+
+    </table>
+
+    <br>
+
+    <button onclick="saveProduct()">
+      Save Product
+    </button>
+
+    <button onclick="closeAddProduct()">
+      Cancel
+    </button>
+
+  </div>
+
+</div>
+
 
 <script>
 
@@ -141,7 +216,27 @@ function comingSoon(){
 
 }
 
-window.onload = loadProducts;
+window.onload = function () {
+
+    loadProducts();
+
+    document
+        .getElementById("addProductButton")
+        .addEventListener("click", openAddProduct);
+
+};
+
+function openAddProduct() {
+
+    document.getElementById("addProductModal").style.display = "block";
+
+}
+
+function closeAddProduct() {
+
+    document.getElementById("addProductModal").style.display = "none";
+
+}
 
 </script>
 
