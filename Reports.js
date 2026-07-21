@@ -289,10 +289,11 @@ function getInventoryVariance() {
   for (let i = 1; i < detailData.length; i++) {
 
     if (
-      detailData[i][INVENTORY_DETAIL_COLUMNS.SESSION_ID] !== session.sessionId
-    ) {
-      continue;
-    }
+    String(detailData[i][INVENTORY_DETAIL_COLUMNS.SESSION_ID]) !==
+    String(session.sessionId)
+) {
+    continue;
+}
 
     const productId =
       detailData[i][INVENTORY_DETAIL_COLUMNS.PRODUCT_ID];
@@ -302,8 +303,12 @@ function getInventoryVariance() {
     for (let p = 1; p < productData.length; p++) {
 
       if (
-        productData[p][PRODUCT_COLUMNS.ID] === productId
-      ) {
+    String(productData[p][PRODUCT_COLUMNS.ID]) ===
+    String(productId)
+) {
+    product = productData[p];
+    break;
+}{
         product = productData[p];
         break;
       }
@@ -342,6 +347,7 @@ productId: product[PRODUCT_COLUMNS.ID],
   return results;
 
 }
+
 function getTransactionHistory() {
 
   const sheet = SpreadsheetApp

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <base target="_top">
+
+  <?!= HtmlService.createHtmlOutputFromFile('styles').getContent(); ?>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="dashboardHeader">
+
+        <h2>Product Maintenance</h2>
+
+        <button onclick="comingSoon()">
+            + Add Product
+        </button>
+
+    </div>
+
+    <div class="searchBar">
+
+        <input
+            id="searchBox"
+            type="text"
+            placeholder="Search Products..."
+            onkeyup="searchProducts()">
+
+    </div>
+
+    <table id="productTable">
+
+        <thead>
+
+            <tr>
+
+                <th>SKU</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>On Hand</th>
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="productBody">
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<script>
+
+let products = [];
+
+function loadProducts(){
+
+    google.script.run
+        .withSuccessHandler(showProducts)
+        .getActiveProducts();
+
+}
+
+function showProducts(data){
+
+    products = data;
+
+    renderProducts(products);
+
+}
+
+function renderProducts(list){
+
+    const body = document.getElementById("productBody");
+
+    body.innerHTML = "";
+
+    list.forEach(product => {
+
+        body.innerHTML += `
+
+        <tr>
+
+            <td>${product[1]}</td>
+            <td>${product[5]}</td>
+            <td>${product[2]}</td>
+            <td>${product[9]}</td>
+
+            <td>
+
+                <button onclick="comingSoon()">
+
+                    Edit
+
+                </button>
+
+                <button onclick="comingSoon()">
+
+                    Deactivate
+
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+function searchProducts(){
+
+    const search = document
+        .getElementById("searchBox")
+        .value
+        .toLowerCase();
+
+    const filtered = products.filter(product =>
+
+        product.join(" ").toLowerCase().includes(search)
+
+    );
+
+    renderProducts(filtered);
+
+}
+
+function comingSoon(){
+
+    alert("This feature will be implemented in the next Beta 1.1 step.");
+
+}
+
+window.onload = loadProducts;
+
+</script>
+
+</body>
+
+</html>

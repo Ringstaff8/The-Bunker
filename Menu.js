@@ -22,7 +22,7 @@ function createBunkerMenu() {
     // Inventory
     .addSubMenu(
       ui.createMenu("📦 Inventory")
-        .addItem("📋 Products", "showProducts")
+        .addItem("📋 Products", "showProductsMaintenance")
         .addItem("📥 Receive Inventory", "showReceiving")
         .addItem("📋 Physical Inventory Count", "showInventoryCount")
         .addItem("🔄 Inventory Adjustment", "showInventoryAdjustment")
@@ -92,10 +92,20 @@ function showInventorySessionHistoryReport() {
 
 }
 
+/**
+ * Opens the Product Maintenance window
+ */
 function showProducts() {
 
-  SpreadsheetApp.getUi().alert(
-    "🚧 Product Management\n\nComing in Beta 2."
+  const html = HtmlService
+    .createTemplateFromFile("products")
+    .evaluate()
+    .setWidth(1100)
+    .setHeight(700);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "📋 Product Maintenance"
   );
 
 }
