@@ -61,7 +61,7 @@
 
   <div class="modalContent">
 
-    <h2>Add New Product</h2>
+    <h2 id="productModalTitle">Add New Product</h2>
 
     <table class="formTable">
 
@@ -151,9 +151,9 @@
 
     <br>
 
-    <button onclick="saveProduct()">
-      Save Product
-    </button>
+    <button id="saveProductButton" onclick="saveProduct()">
+  Save Product
+</button>
 
     <button onclick="closeAddProduct()">
       Cancel
@@ -167,6 +167,9 @@
 <script>
 
 let products = [];
+
+let editMode = false;
+let editingProductId = "";
 
 function loadProducts(){
 
@@ -203,11 +206,9 @@ function renderProducts(list){
 
             <td>
 
-                <button onclick="comingSoon()">
-
-                    Edit
-
-                </button>
+               <button onclick="editProduct('${product[0]}')">
+    Edit
+</button>
 
                 <button onclick="comingSoon()">
 
@@ -274,17 +275,63 @@ window.onload = function () {
 
 };
 
+
 function openAddProduct() {
+
+    editMode = false;
+    editingProductId = "";
+
+    clearProductForm();
+
+    document.getElementById("productModalTitle").textContent =
+        "Add New Product";
+
+    document.getElementById("saveProductButton").textContent =
+        "Save Product";
 
     document.getElementById("addProductModal").style.display = "block";
 
 }
 
-function closeAddProduct() {
+function editProduct(productId) {
 
-    document.getElementById("addProductModal").style.display = "none";
+    const product = products.find(p =>
+    String(p[0]).trim() === String(productId).trim()
+);
 
+    if (!product) {
+        alert("Product not found.");
+        return;
+    }
+
+    editMode = true;
+    editingProductId = productId;
+
+    document.getElementById("productModalTitle").textContent = "Edit Product";
+    document.getElementById("saveProductButton").textContent = "Update Product";
+
+    document.getElementById("sku").value = product[1];
+    document.getElementById("category").value = product[2];
+    document.getElementById("design").value = product[3];
+    document.getElementById("collection").value = product[4];
+    document.getElementById("name").value = product[5];
+    document.getElementById("size").value = product[6];
+    document.getElementById("cost").value = product[7];
+    document.getElementById("price").value = product[8];
+    document.getElementById("onHand").value = product[9];
+ document.getElementById("active").checked =
+    String(product[10]).trim() === "Y";
+
+document.getElementById("trackSize").checked =
+    String(product[11]).trim() === "Y";
+    document.getElementById("reorder").value = product[12];
+    document.getElementById("vendor").value = product[13];
+    document.getElementById("notes").value = product[14];
+
+    document.getElementById("addProductModal").style.display = "block";
 }
+
+
 function loadDropdown(id, values) {
 
     const select = document.getElementById(id);
@@ -306,7 +353,9 @@ function loadDropdown(id, values) {
 
 function saveProduct() {
 
-   const product = {
+  const product = {
+
+    id: editingProductId,
 
     sku: document.getElementById("sku").value.trim(),
     category: document.getElementById("category").value,
@@ -340,13 +389,26 @@ function saveProduct() {
         return;
     }
 
-    google.script.run
-        .withSuccessHandler(productSaved)
-        .withFailureHandler(productSaveFailed)
-        .addProduct(product);
+   const runner = google.script.run
+    .withSuccessHandler(productSaved)
+    .withFailureHandler(productSaveFailed);
 
+if (editMode) {
+    runner.updateProduct(product);
+} else {
+    runner.addProduct(product);
 }
+}
+
+
 function productSaved() {
+
+    const message = editMode
+        ? "Product updated successfully."
+        : "Product added successfully.";
+
+    editMode = false;
+    editingProductId = "";
 
     closeAddProduct();
 
@@ -354,7 +416,7 @@ function productSaved() {
 
     loadProducts();
 
-    alert("Product added successfully.");
+    setTimeout(() => alert(message), 100);
 
 }
 
@@ -379,6 +441,18 @@ document.getElementById("reorder").value = "";
     document.getElementById("notes").value = "";
 
     document.getElementById("trackSize").checked = false;
+    document.getElementById("active").checked = true;
+
+}
+
+function closeAddProduct() {
+
+    document.getElementById("addProductModal").style.display = "none";
+
+    editMode = false;
+    editingProductId = "";
+
+    clearProductForm();
 
 }
 

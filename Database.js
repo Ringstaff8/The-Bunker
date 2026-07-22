@@ -200,42 +200,50 @@ const row = [
 }
 
 function updateProduct(product) {
+
   if (!product) {
-  throw new Error("Product object is required.");
-}
+    throw new Error("Product object is required.");
+  }
+
+  if (!product.id) {
+    throw new Error("Product ID is required.");
+  }
 
   const sheet = getProductsSheet();
-
   const data = sheet.getDataRange().getValues();
 
   for (let i = 1; i < data.length; i++) {
 
-    if (String(data[i][PRODUCT_COLUMNS.ID]) === String(product.id)) {
+    if (String(data[i][0]) === String(product.id)) {
 
-      sheet.getRange(i + 1, PRODUCT_COLUMNS.CATEGORY + 1, 1, 13)
-        .setValues([[
-          product.category,
-          product.design,
-          product.collection,
-          product.name,
-          product.size,
-          product.cost,
-          product.price,
-          product.onHand,
-          product.active,
-          product.trackSize,
-          product.reorder,
-          product.vendor,
-          product.notes
-        ]]);
+      const row = [
+
+        product.id,                           // Product ID
+        product.sku.trim(),                   // SKU
+        product.category,                     // Category
+        product.design || "",                 // Design
+        product.collection || "",             // Collection
+        product.name.trim(),                  // Product Name
+        product.size || "",                   // Size
+        Number(product.cost) || 0,            // Cost
+        Number(product.price) || 0,           // Price
+        Number(product.onHand) || 0,          // On Hand
+        product.active ? "Y" : "N",           // Active
+        product.trackSize ? "Y" : "N",        // Track Size
+        Number(product.reorder) || 0,         // Reorder Level
+        product.vendor || "",                 // Vendor
+        product.notes || ""                   // Notes
+
+      ];
+      Logger.log(row);
+
+      sheet.getRange(i + 1, 1, 1, row.length).setValues([row]);
 
       return true;
-
     }
-
   }
 
-  return false;
+  throw new Error("Product not found.");
 
 }
 

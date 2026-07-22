@@ -11,8 +11,13 @@
 <body>
 
 <div class="container">
+ <div class="adminControls">
+    <button id="adminButton" onclick="adminLogin()">🔒 Admin Mode</button>
+</div>
 
     <div class="dashboardHeader">
+      
+       
 
     <div class="logoArea">
 
@@ -89,13 +94,13 @@
 
         <div class="quickActions">
 
-            <button disabled>🛒 Ring Up Sale</button>
+           <button onclick="openSales()">🛒 Ring Up Sale</button>
 
-            <button disabled>🎁 Promotional</button>
+<button id="promoButton" onclick="openPromotional()">🎁 Promotional</button>
 
-            <button disabled>📦 Inventory</button>
+<button id="productsButton" onclick="openProducts()">📦 Products</button>
 
-            <button disabled>📊 Reports</button>
+
 
         </div>
 
@@ -148,6 +153,8 @@ window.onload = function () {
 
         })
         .getDashboardStats();
+        document.getElementById("promoButton").style.display = "none";
+document.getElementById("productsButton").style.display = "none";
 
 };
 
@@ -253,7 +260,59 @@ stats.recentActivity.forEach(function(item) {
 activityContainer.innerHTML = activityHtml;
 }
 
+
+function openSales() {
+
+    google.script.run.showSales();
+
+}
+
+function openPromotional() {
+    google.script.run.showPromotional();
+}
+
+function openProducts() {
+    google.script.run.showProducts();
+}
+
+let isAdmin = false;
+
+function adminLogin() {
+
+    // Already in Admin Mode? Log out.
+    if (isAdmin) {
+
+        isAdmin = false;
+
+        document.getElementById("adminButton").textContent =
+            "🔒 Admin Mode";
+
+        document.getElementById("promoButton").style.display =
+            "none";
+
+        document.getElementById("productsButton").style.display =
+            "none";
+
+        return;
+    }
+
+    // Open the login modal
+    document.getElementById("modalOverlay").style.display = "flex";
+
+    document.getElementById("adminPassword").value = "";
+
+    document.getElementById("adminError").style.display = "none";
+
+}
+
 </script>
+
+
+<?!= HtmlService.createHtmlOutputFromFile('Modals').getContent(); ?>
+<?!= HtmlService.createHtmlOutputFromFile('javascript').getContent(); ?>
+<?!= HtmlService.createHtmlOutputFromFile('styles').getContent(); ?>
+
+
 
 </body>
 </html>

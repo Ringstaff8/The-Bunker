@@ -2,38 +2,12 @@
  * ==========================================================
  * THE BUNKER
  * Security.gs
- * Beta 1.0
+ * Beta 1.1
  * ==========================================================
  */
 
 /**
- * Beta 1 Promotional Password
- *
- * TODO:
- * Move to Settings sheet in Beta 2.
- */
-const BUNKER_PASSWORD = "Tornado2026";
-
-
-/**
- * Verifies the administrator password.
- *
- * Returns:
- * true  = Correct password
- * false = Incorrect password
- */
-function verifyPassword(password){
-
-  return password === BUNKER_PASSWORD;
-
-}
-
-
-/**
  * Opens the Promotional Items screen.
- *
- * Password is verified by the HTML page before
- * inventory can be removed.
  */
 function showPromotional() {
 
@@ -49,15 +23,11 @@ function showPromotional() {
 
 /**
  * Returns the current user.
- *
- * Future versions can use this for permissions.
  */
-function getCurrentUser(){
+function getCurrentUser() {
 
   return {
-
     email: Session.getActiveUser().getEmail()
-
   };
 
 }
@@ -66,11 +36,47 @@ function getCurrentUser(){
 /**
  * Returns whether the current user is an administrator.
  *
- * Beta 1:
- * Everyone is treated as an administrator.
+ * Beta 1.1:
+ * Everyone is treated as an administrator once
+ * the password has been verified by the client.
  */
-function isAdministrator(){
+function isAdministrator() {
 
   return true;
+
+}
+
+
+/**
+ * Returns the administrator password
+ * from the Settings sheet.
+ */
+function getAdminPassword() {
+
+  const sheet = SpreadsheetApp
+    .getActiveSpreadsheet()
+    .getSheetByName("Settings");
+
+  const values = sheet.getDataRange().getValues();
+
+  for (let i = 1; i < values.length; i++) {
+
+    if (values[i][0] === "AdminPassword") {
+      return String(values[i][1]).trim();
+    }
+
+  }
+
+  throw new Error("AdminPassword not found in Settings sheet.");
+
+}
+
+
+/**
+ * Verifies the administrator password.
+ */
+function verifyAdminPassword(password) {
+
+  return password === getAdminPassword();
 
 }
