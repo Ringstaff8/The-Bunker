@@ -145,6 +145,19 @@ tbody.appendChild(row);
 
             });
 
+              })
+        .withFailureHandler(function(error) {
+
+            console.error(
+                "Inventory category load failed:",
+                error
+            );
+
+            alert(
+                "Inventory Error: " +
+                (error.message || error)
+            );
+
         })
         .loadProductsByCategory(category);
 

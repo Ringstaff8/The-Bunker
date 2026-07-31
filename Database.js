@@ -146,9 +146,10 @@ function getInventoryCountDetailsSheet() {
 
   }
 
- 
+  return sheet;
 
 }
+
 function getProductById(productId) {
 
   const products = getProducts();
