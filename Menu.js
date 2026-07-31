@@ -21,42 +21,20 @@ function createBunkerMenu() {
 
     // Inventory
     .addSubMenu(
-      ui.createMenu("📦 Inventory")
-        .addItem("📋 Products", "showProductsMaintenance")
-        .addItem("📥 Receive Inventory", "showReceiving")
-        .addItem("📋 Physical Inventory Count", "showInventoryCount")
-        .addItem("🔄 Inventory Adjustment", "showInventoryAdjustment")
-    )
+  ui.createMenu("📦 Inventory")
+    .addItem("📋 Products", "showProductsMaintenance")
+    .addItem("📋 Physical Inventory Count", "showInventoryCount")
+)
 
     .addSeparator()
 
   // Reports
 .addSubMenu(
   ui.createMenu("📊 Reports")
-
-    // Current Reports
     .addItem("💰 Sales Report", "showSalesReport")
     .addItem("📉 Low Stock Report", "showLowStockReport")
     .addItem("📋 Inventory Variance Report", "showInventoryVarianceReport")
     .addItem("📜 Transaction History Report", "showTransactionHistoryReport")
-
-    .addSeparator()
-
-    // Inventory Reports
-    .addItem("💲 Inventory Valuation Report", "showInventoryValuationReport")
-    .addItem("📋 Inventory Session History Report", "showInventorySessionHistoryReport")
-    .addItem("🔄 Inventory Adjustment Report", "showInventoryAdjustmentReport")
-
-    .addSeparator()
-
-    // Financial Reports
-    .addItem("📈 Profit Report", "showProfitReport")
-    .addItem("🎁 Promotional History Report", "showPromotionalHistoryReport")
-
-    .addSeparator()
-
-    // Dashboard
-    .addItem("📊 Reports Dashboard", "showReportsDashboard")
 )
 
     // Development Tools

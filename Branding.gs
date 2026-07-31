@@ -14,7 +14,7 @@ const BRANDING = Object.freeze({
   // --------------------------------------------------
 
   APP_NAME: "The Bunker",
-  VERSION: "1.0.0",
+ VERSION: "1.1.0",
   BUILD: "2026.07.15.001",
   RELEASE_STATUS: "Release Candidate",
 

@@ -171,6 +171,26 @@ window.onload = function () {
 
     document.getElementById("productsButton").style.display =
         "none";
+google.script.run
+    .withSuccessHandler(function(assets) {
+
+        if (assets && assets.logo) {
+
+            document.getElementById("bunkerLogo").src =
+                assets.logo;
+
+        }
+
+    })
+    .withFailureHandler(function(error) {
+
+        console.error(
+            "Unable to load Bunker logo:",
+            error
+        );
+
+    })
+    .getBrandAssets();
 
 }
 };
