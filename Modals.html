@@ -1,4 +1,3 @@
-
 <!-- ==========================================
      BUNKER MODAL
 ========================================== -->
@@ -13,30 +12,34 @@
 
         <div class="modalBody" id="modalBody">
 
-    <label for="adminPassword">Password</label>
+            <label for="adminPassword">Password</label>
 
-    <input
-        type="password"
-        id="adminPassword"
-        autocomplete="off">
+            <input
+                type="password"
+                id="adminPassword"
+                autocomplete="off">
 
-    <div id="adminError" style="display:none;">
-        Incorrect password.
-    </div>
+            <div id="adminError" style="display:none;">
+                Incorrect password.
+            </div>
 
-    <div class="modalButtons">
+            <div class="modalButtons">
 
-        <button id="adminLoginButton">
-            Login
-        </button>
+                <button
+    type="button"
+    id="adminLoginButton"
+    onclick="submitAdminLogin()">
+    Login
+</button>
 
-        <button id="adminCancelButton">
-            Cancel
-        </button>
+<button
+    type="button"
+    id="adminCancelButton"
+    onclick="closeAdminModal()">
+    Cancel
+</button>
 
-    </div>
-
-</div>
+            </div>
 
         </div>
 

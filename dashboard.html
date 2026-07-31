@@ -296,14 +296,65 @@ function adminLogin() {
         return;
     }
 
-    // Open the login modal
-    document.getElementById("modalOverlay").style.display = "flex";
+    // Open Admin Login modal.
+    document.getElementById("modalOverlay").style.display =
+        "flex";
+
+    document.getElementById("adminPassword").value =
+        "";
+
+    document.getElementById("adminError").style.display =
+        "none";
+
+}
+
+function closeAdminModal() {
+
+    document.getElementById("modalOverlay").style.display = "none";
 
     document.getElementById("adminPassword").value = "";
 
     document.getElementById("adminError").style.display = "none";
 
 }
+
+function submitAdminLogin() {
+
+    const password =
+        document.getElementById("adminPassword").value;
+
+    google.script.run
+
+        .withSuccessHandler(function(valid) {
+
+            if (valid) {
+
+                isAdmin = true;
+
+                document.getElementById("adminButton").textContent =
+                    "🔓 Exit Admin";
+
+                document.getElementById("promoButton").style.display =
+                    "inline-block";
+
+                document.getElementById("productsButton").style.display =
+                    "inline-block";
+
+                closeAdminModal();
+
+            } else {
+
+                document.getElementById("adminError").style.display =
+                    "block";
+
+            }
+
+        })
+
+        .verifyAdminPassword(password);
+
+}
+
 
 </script>
 
