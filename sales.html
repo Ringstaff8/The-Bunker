@@ -186,13 +186,23 @@ onclick="clearCart()">
 
 <div style="text-align:center;padding:20px;color:#888;font-size:12px;">
 
-    The Bunker v<?= APP.VERSION ?>
+    The Bunker v<?= BRANDING.VERSION ?>
 
 </div>
 
 <script>
 
+    const RUN_MODE = "<?= RUN_MODE ?>";
+
+
 function goHome() {
+
+    if (RUN_MODE === "sheets") {
+
+        google.script.host.close();
+        return;
+
+    }
 
     google.script.run
         .withSuccessHandler(function(url) {

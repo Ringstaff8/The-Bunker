@@ -11,11 +11,19 @@
  */
 function showDashboard() {
 
-  showDialog(
-    "dashboard",
-    "🌪️ The Bunker Dashboard",
-    1400,
-    900
+  const template =
+    HtmlService.createTemplateFromFile("dashboard");
+
+  template.RUN_MODE = "sheets";
+
+  const html = template
+    .evaluate()
+    .setWidth(1400)
+    .setHeight(900);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "🌪️ The Bunker Dashboard"
   );
 
 }

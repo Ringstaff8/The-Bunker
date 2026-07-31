@@ -72,20 +72,24 @@ function doGet(e) {
       ? e.parameter.page
       : "dashboard";
 
-const allowedPages = [
+  const allowedPages = [
     "dashboard",
     "sales",
     "Promotional",
     "products"
-];
+  ];
 
   const fileName =
     allowedPages.includes(page)
       ? page
       : "dashboard";
 
-  return HtmlService
-    .createTemplateFromFile(fileName)
+  const template =
+    HtmlService.createTemplateFromFile(fileName);
+
+  template.RUN_MODE = "web";
+
+  return template
     .evaluate()
     .setTitle("The Bunker")
     .setXFrameOptionsMode(

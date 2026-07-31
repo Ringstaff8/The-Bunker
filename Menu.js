@@ -69,8 +69,12 @@ function showInventorySessionHistoryReport() {
  */
 function showProducts() {
 
-  const html = HtmlService
-    .createTemplateFromFile("products")
+  const template =
+    HtmlService.createTemplateFromFile("products");
+
+  template.RUN_MODE = "sheets";
+
+  const html = template
     .evaluate()
     .setWidth(1100)
     .setHeight(700);
@@ -81,6 +85,7 @@ function showProducts() {
   );
 
 }
+
 
 function showReports() {
 

@@ -11,11 +11,19 @@
  */
 function showPromotional() {
 
-  showDialog(
-    "Promotional",
-    "🎁 Promotional Items",
-    900,
-    700
+  const template =
+    HtmlService.createTemplateFromFile("Promotional");
+
+  template.RUN_MODE = "sheets";
+
+  const html = template
+    .evaluate()
+    .setWidth(900)
+    .setHeight(700);
+
+  SpreadsheetApp.getUi().showModalDialog(
+    html,
+    "🎁 Promotional Items"
   );
 
 }

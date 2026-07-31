@@ -124,6 +124,12 @@
 
 <script>
 
+const RUN_MODE = "<?= RUN_MODE ?>";
+
+let isAdmin =
+    sessionStorage.getItem("bunkerAdmin") === "true";
+
+                
 window.onload = function () {
 
     // Dashboard loading state
@@ -153,7 +159,7 @@ window.onload = function () {
 
         })
         .getDashboardStats();
-      if (isAdmin) {
+   if (isAdmin) {
 
     document.getElementById("adminButton").textContent =
         "🔓 Exit Admin";
@@ -171,6 +177,11 @@ window.onload = function () {
 
     document.getElementById("productsButton").style.display =
         "none";
+
+}
+
+
+// Load Dashboard logo
 google.script.run
     .withSuccessHandler(function(assets) {
 
@@ -192,7 +203,6 @@ google.script.run
     })
     .getBrandAssets();
 
-}
 };
 
 function loadDashboard(stats){
@@ -300,6 +310,13 @@ activityContainer.innerHTML = activityHtml;
 
 function openSales() {
 
+    if (RUN_MODE === "sheets") {
+
+        google.script.run.showSales();
+        return;
+
+    }
+
     google.script.run
         .withSuccessHandler(function(url) {
 
@@ -307,23 +324,19 @@ function openSales() {
                 url + "?page=sales";
 
         })
-        .withFailureHandler(function(error) {
-
-            console.error(
-                "Unable to open Sales:",
-                error
-            );
-
-            alert(
-                "Unable to open Ring Up Sale."
-            );
-
-        })
         .getWebAppUrl();
 
 }
 
+
 function openPromotional() {
+
+    if (RUN_MODE === "sheets") {
+
+        google.script.run.showPromotional();
+        return;
+
+    }
 
     google.script.run
         .withSuccessHandler(function(url) {
@@ -332,23 +345,19 @@ function openPromotional() {
                 url + "?page=Promotional";
 
         })
-        .withFailureHandler(function(error) {
-
-            console.error(
-                "Unable to open Promotional:",
-                error
-            );
-
-            alert(
-                "Unable to open Promotional Items."
-            );
-
-        })
         .getWebAppUrl();
 
 }
 
+
 function openProducts() {
+
+    if (RUN_MODE === "sheets") {
+
+        google.script.run.showProducts();
+        return;
+
+    }
 
     google.script.run
         .withSuccessHandler(function(url) {
@@ -357,25 +366,9 @@ function openProducts() {
                 url + "?page=products";
 
         })
-        .withFailureHandler(function(error) {
-
-            console.error(
-                "Unable to open Products:",
-                error
-            );
-
-            alert(
-                "Unable to open Product Maintenance."
-            );
-
-        })
         .getWebAppUrl();
 
 }
-
-let isAdmin =
-    sessionStorage.getItem("bunkerAdmin") === "true";
-
 function adminLogin() {
 
     // Already in Admin Mode? Log out.

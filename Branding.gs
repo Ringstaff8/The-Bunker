@@ -1,7 +1,7 @@
 /**
  * ---------------------------------------------------------
  * The Bunker Branding Configuration
- * Beta 1.0
+ * Beta 1.1
  * ---------------------------------------------------------
  * This file contains all school-specific branding.
  * ---------------------------------------------------------
@@ -23,7 +23,7 @@ const BRANDING = Object.freeze({
   // --------------------------------------------------
 
   SCHOOL_NAME: "Paducah Middle School",
-  MASCOT: "Tornadoes",
+  MASCOT: "Tornado",
 
   // --------------------------------------------------
   // Dashboard

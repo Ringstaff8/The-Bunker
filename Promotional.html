@@ -68,16 +68,19 @@
             Complete Giveaway
         </button>
 
-        <button class="danger-btn"
-                onclick="google.script.host.close()">
-            Cancel
-        </button>
+        <button
+    class="danger-btn"
+    onclick="goHome()">
+    Cancel
+</button>
 
     </div>
 
 </div>
 
 <script>
+
+const RUN_MODE = "<?= RUN_MODE ?>";
 
 function submitPromo() {
 
@@ -147,8 +150,16 @@ google.script.run
 </script>
 
 <script>
+   
 
 function goHome() {
+
+    if (RUN_MODE === "sheets") {
+
+        google.script.host.close();
+        return;
+
+    }
 
     google.script.run
         .withSuccessHandler(function(url) {

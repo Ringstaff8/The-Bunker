@@ -171,6 +171,8 @@
 
 
 <script>
+    const RUN_MODE = "<?= RUN_MODE ?>";
+
 
 let products = [];
 
@@ -466,6 +468,13 @@ function closeAddProduct() {
 <script>
 
 function goHome() {
+
+    if (RUN_MODE === "sheets") {
+
+        google.script.host.close();
+        return;
+
+    }
 
     google.script.run
         .withSuccessHandler(function(url) {
