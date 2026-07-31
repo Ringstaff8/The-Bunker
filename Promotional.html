@@ -13,6 +13,13 @@
 <div class="container">
 
     <h2>🎁 Promotional Giveaway</h2>
+    <button
+    type="button"
+    onclick="goHome()">
+    🏠 Dashboard
+</button>
+
+<br><br>
 
     <div class="card">
 
@@ -138,3 +145,35 @@ google.script.run
     .loadProducts();
 
 </script>
+
+<script>
+
+function goHome() {
+
+    google.script.run
+        .withSuccessHandler(function(url) {
+
+            window.top.location.href =
+                url + "?page=dashboard";
+
+        })
+        .withFailureHandler(function(error) {
+
+            console.error(
+                "Unable to open Dashboard:",
+                error
+            );
+
+            alert(
+                "Unable to return to Dashboard."
+            );
+
+        })
+        .getWebAppUrl();
+
+}
+
+</script>
+
+</body>
+</html>

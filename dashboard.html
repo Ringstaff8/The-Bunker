@@ -153,9 +153,26 @@ window.onload = function () {
 
         })
         .getDashboardStats();
-        document.getElementById("promoButton").style.display = "none";
-document.getElementById("productsButton").style.display = "none";
+      if (isAdmin) {
 
+    document.getElementById("adminButton").textContent =
+        "🔓 Exit Admin";
+
+    document.getElementById("promoButton").style.display =
+        "inline-block";
+
+    document.getElementById("productsButton").style.display =
+        "inline-block";
+
+} else {
+
+    document.getElementById("promoButton").style.display =
+        "none";
+
+    document.getElementById("productsButton").style.display =
+        "none";
+
+}
 };
 
 function loadDashboard(stats){
@@ -315,7 +332,8 @@ function openProducts() {
     google.script.run.showProducts();
 }
 
-let isAdmin = false;
+let isAdmin =
+    sessionStorage.getItem("bunkerAdmin") === "true";
 
 function adminLogin() {
 
@@ -323,6 +341,7 @@ function adminLogin() {
     if (isAdmin) {
 
         isAdmin = false;
+        sessionStorage.removeItem("bunkerAdmin");
 
         document.getElementById("adminButton").textContent =
             "🔒 Admin Mode";
@@ -370,6 +389,7 @@ function submitAdminLogin() {
             if (valid) {
 
                 isAdmin = true;
+                sessionStorage.setItem("bunkerAdmin", "true");
 
                 document.getElementById("adminButton").textContent =
                     "🔓 Exit Admin";
@@ -394,7 +414,24 @@ function submitAdminLogin() {
         .verifyAdminPassword(password);
 
 }
+document.addEventListener("keydown", function(event) {
 
+    const modal =
+        document.getElementById("modalOverlay");
+
+    if (
+        event.key === "Enter" &&
+        modal &&
+        modal.style.display !== "none"
+    ) {
+
+        event.preventDefault();
+
+        submitAdminLogin();
+
+    }
+
+});
 
 </script>
 
