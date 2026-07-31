@@ -72,10 +72,11 @@ function doGet(e) {
       ? e.parameter.page
       : "dashboard";
 
- const allowedPages = [
+const allowedPages = [
     "dashboard",
     "sales",
-    "Promotional"
+    "Promotional",
+    "products"
 ];
 
   const fileName =

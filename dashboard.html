@@ -329,7 +329,28 @@ function openPromotional() {
 }
 
 function openProducts() {
-    google.script.run.showProducts();
+
+    google.script.run
+        .withSuccessHandler(function(url) {
+
+            window.top.location.href =
+                url + "?page=products";
+
+        })
+        .withFailureHandler(function(error) {
+
+            console.error(
+                "Unable to open Products:",
+                error
+            );
+
+            alert(
+                "Unable to open Product Maintenance."
+            );
+
+        })
+        .getWebAppUrl();
+
 }
 
 let isAdmin =

@@ -15,13 +15,19 @@
 
     <div class="dashboardHeader">
 
-        <h2>Product Maintenance</h2>
+    <h2>Product Maintenance</h2>
 
-        <button id="addProductButton">
-    + Add Product
-</button>
+    <button id="addProductButton">
+        + Add Product
+    </button>
 
-    </div>
+    <button
+        type="button"
+        onclick="goHome()">
+        🏠 Dashboard
+    </button>
+
+</div>
 
     <div class="searchBar">
 
@@ -457,7 +463,34 @@ function closeAddProduct() {
 }
 
 </script>
+<script>
 
+function goHome() {
+
+    google.script.run
+        .withSuccessHandler(function(url) {
+
+            window.top.location.href =
+                url + "?page=dashboard";
+
+        })
+        .withFailureHandler(function(error) {
+
+            console.error(
+                "Unable to open Dashboard:",
+                error
+            );
+
+            alert(
+                "Unable to return to Dashboard."
+            );
+
+        })
+        .getWebAppUrl();
+
+}
+
+</script>
 </body>
 
 </html>
