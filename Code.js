@@ -72,10 +72,11 @@ function doGet(e) {
       ? e.parameter.page
       : "dashboard";
 
-  const allowedPages = [
+ const allowedPages = [
     "dashboard",
-    "sales"
-  ];
+    "sales",
+    "Promotional"
+];
 
   const fileName =
     allowedPages.includes(page)

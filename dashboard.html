@@ -287,7 +287,28 @@ function openSales() {
 }
 
 function openPromotional() {
-    google.script.run.showPromotional();
+
+    google.script.run
+        .withSuccessHandler(function(url) {
+
+            window.top.location.href =
+                url + "?page=Promotional";
+
+        })
+        .withFailureHandler(function(error) {
+
+            console.error(
+                "Unable to open Promotional:",
+                error
+            );
+
+            alert(
+                "Unable to open Promotional Items."
+            );
+
+        })
+        .getWebAppUrl();
+
 }
 
 function openProducts() {
