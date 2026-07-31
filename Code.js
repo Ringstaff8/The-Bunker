@@ -64,3 +64,38 @@ function testSales() {
   showSales();
 
 }
+
+function doGet(e) {
+
+  const page =
+    e && e.parameter && e.parameter.page
+      ? e.parameter.page
+      : "dashboard";
+
+  const allowedPages = [
+    "dashboard",
+    "sales"
+  ];
+
+  const fileName =
+    allowedPages.includes(page)
+      ? page
+      : "dashboard";
+
+  return HtmlService
+    .createTemplateFromFile(fileName)
+    .evaluate()
+    .setTitle("The Bunker")
+    .setXFrameOptionsMode(
+      HtmlService.XFrameOptionsMode.ALLOWALL
+    );
+
+}
+
+function getWebAppUrl() {
+
+  return ScriptApp
+    .getService()
+    .getUrl();
+
+}

@@ -78,12 +78,6 @@ function createBunkerMenu() {
 
 
 
-function showPromotional() {
-
-  SpreadsheetApp.getUi().alert("showPromotional() is running");
-
-}
-
 function showInventorySessionHistoryReport() {
 
   SpreadsheetApp.getUi().alert(

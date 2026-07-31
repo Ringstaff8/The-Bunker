@@ -21,10 +21,16 @@
     <br>
 
     <span style="font-size:18px;font-weight:normal;">
-
         Ring Up Sale
-
     </span>
+
+    <br><br>
+
+    <button
+        type="button"
+        onclick="goHome()">
+        🏠 Dashboard
+    </button>
 
 </div>
 
@@ -183,6 +189,35 @@ onclick="clearCart()">
     The Bunker v<?= APP.VERSION ?>
 
 </div>
+
+<script>
+
+function goHome() {
+
+    google.script.run
+        .withSuccessHandler(function(url) {
+
+            window.top.location.href =
+                url + "?page=dashboard";
+
+        })
+        .withFailureHandler(function(error) {
+
+            console.error(
+                "Unable to open Dashboard:",
+                error
+            );
+
+            alert(
+                "Unable to return to Dashboard."
+            );
+
+        })
+        .getWebAppUrl();
+
+}
+
+</script>
 
 </body>
 
